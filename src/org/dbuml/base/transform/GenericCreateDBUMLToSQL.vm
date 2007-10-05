@@ -1,0 +1,60 @@
+## SQL 92 source template
+###########################################################################
+##
+##      Create Database
+##########################################################################
+#if ($Database)
+/* Database $Database.getName() */
+##
+##      Create Schema
+##
+#elseif ($Schema)
+## Schema $Schema.getName()   
+#if ($Namespace != "")
+/* CREATE SCHEMA $Schema.getFixedName()    */
+CREATE SCHEMA $Schema.getFixedName();
+#else
+## Owning database does not support Schemas or the namespace is the default Schema 
+#end
+##############################################################################
+##       Create Table
+##############################################################################
+#elseif ($Table)
+#set($colnum = $Table.getColumnsVector().size())
+#if ($colnum >0)
+#if ($Namespace != "")
+## code for Namespace / Schema added / modified by sbalda on 11/14
+/* CREATE TABLE $Namespace.$Table.getFixedName()    */	
+CREATE TABLE $Namespace.$Table.getFixedName()
+#else
+/* CREATE TABLE $Table.getFixedName()    */
+CREATE TABLE $Table.getFixedName()
+#end
+(
+##-----------------------------------------------------------------------
+##       Create Table Columns with length, scale, and not null constraints
+##-----------------------------------------------------------------------
+#foreach ($nextColumn in $Table.getColumnsVector())
+#ColumnDef ($nextColumn) #if ($velocityCount < $colnum),
+#end
+#end
+);
+#end
+##############################################################################
+##       Create View
+##############################################################################
+#elseif ($View)
+#set($queryStr = $View.getQueryString())
+#if ($queryStr != "") 
+## added $Namespace.$View.getFixedName() 11/14	& made few changes in this condition.
+/* CREATE VIEW $Namespace.$View.getFixedName() */   
+##create view $View.getFixedName()		
+CREATE VIEW $Namespace.$View.getFixedName()	
+#set($colnum = $View.getColumnsVector().size())
+#if ($colnum > 0)
+(#foreach ($nextColumn in $View.getColumnsVector())$nextColumn.getFixedName() #if ($velocityCount < $colnum),#end #end)
+#end
+as
+$queryStr
+#end
+#end

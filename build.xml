@@ -1,0 +1,346 @@
+<?xml version="1.0"?>
+
+<!-- ===========================================================================
+
+                     * ========================== *
+                     |  How to build DBUML module |
+                     * ========================== *
+
+Property Settings
+=================
+
+These are set in the init target, starting by loading the properties in the 
+./module.properties file. Due to the way Ant sets properties you may override 
+all settings within init in that file.
+
+argo.root.dir must be set in the ./module.properties file.  The argo's 
+default.properties are also loaded. 
+
+Build targets
+=============
+
+run build with the option -projecthelp
+
+===========================================================================
+-->
+
+<project name="dbuml-module" default="install" basedir=".">
+
+<description>
+************************************************************************************
+The DBUML module provides a UML profile for SQL and relational objects.  It enables 
+the generation of SQL statements and generation of UML models from database catalogs.
+</description>
+
+  <!-- =================================================================== -->
+  <!-- Initialization target                                               -->
+  <!-- =================================================================== -->
+
+ <target name="init" 
+         description="initializes the Ant script environment for the other targets">
+
+    <tstamp/>
+
+    <property file="module.properties"/>
+    <property file="${argo.root.dir}/src_new/default.properties"/>
+
+    <property name="Name" value="ArgoModule-${argo.module.name}"/>
+    <property name="name" value="argomodule-${argo.module.name}"/>
+
+    <property name="module.root" value="${basedir}"/>
+    <property name="module.src.dir" value="${argo.root.dir}/src_new"/>
+    <property name="module.tests.src" value="${module.root}/tests"/>
+
+    <property name="module.lib.dir" value="${module.root}/lib"/>
+    
+    <property name="manifest" value="manifest.mf"/>
+    <property name="manifest.src" value="${module.src.dir}/org/dbuml/${manifest}"/>
+
+    <property name="module.build.dir" value="${argo.root.dir}/build"/>
+    <property name="module.build.dest" value="${module.build.dir}/classes"/>
+    <property name="module.tests.build" value="${module.build.dir}/tests"/>
+    <property name="module.tests.classes" value="${module.tests.build}/classes"/>
+    <property name="module.release.dest" value="${module.root}/release"/>
+    <property name="module.release-bundle.dest" value="${module.root}/release-bundle"/>
+    <property name="argo.build.dest" value="${argo.build.dir}/classes"/>
+
+    <property name="module.jarfile.name" value="dbuml.jar"/>
+    <property name="module.jarfile"
+              value="${argo.root.dir}/build/ext/${module.jarfile.name}"/>
+
+   
+    <echo message="${argo.root.dir} ${argo.src.dir} ${junit.jar.path} ${ant.home}"/>
+    <property name="developer.lib.dir" value="${argo.build.dir}"/>
+
+    <property name="debug" value="on"/>
+    <property name="optimize" value="on"/>
+    <property name="deprecation" value="on"/>
+
+    <property name="module.version" value="${argo.core.version}-${DSTAMP}-${TSTAMP}"/>
+
+    <path id="module.compile.classpath">
+        <pathelement location="${argo.build.dir}/argouml.jar"/>
+        <pathelement location="${ocl-argo.jar.path}"/>
+        <pathelement location="${gef.jar.path}"/>
+        <pathelement location="${log4j.jar.path}"/>
+        <pathelement location="${swidgets.jar.path}"/>
+        <pathelement location="${toolbar.jar.path}"/>
+        <pathelement location="${commons-logging.jar.path}"/>
+        <pathelement location="${antlrall.jar.path}"/>
+        <pathelement location="${argo.build.dir}/argouml-model.jar"/>
+        <pathelement location="${module.lib.dir}/velocity-1.4.jar"/>
+    </path>
+      
+    <path id="module.compile-tests.classpath">
+      <pathelement location="${module.build.dest}"/>
+      <path refid="module.compile.classpath"/>
+    </path>
+    
+     <echo message="------------------- ${Name} ${module.version} ----------------"/>
+  </target>
+
+  <!-- Note this file can only make Ant display values set in the file correctly, -->
+  <!-- but external values in the envionment or properties file will be operational.  -->
+
+  <!-- =================================================================== -->
+  <!-- Prepares the build directory                                        -->
+  <!-- =================================================================== -->
+  <target name="prepare" depends="init">
+    <!-- create directories -->
+    <echo message="Preparing the build directories"/>
+    <mkdir dir="${module.build.dest}"/>
+    <mkdir dir="${module.tests.classes}"/>
+    
+    <copy todir="${module.build.dest}/org/dbuml/base/i18n">
+      <fileset dir="${module.src.dir}/org/dbuml/base/i18n" includes="*.properties"/>
+    </copy>
+    <copy todir="${module.build.dest}/org/dbuml/argo/Images">
+      <fileset dir="${module.src.dir}/org/dbuml/argo/images" includes="**/**"/>
+    </copy>
+    <copy todir="${module.build.dest}/org/dbuml/argo/uml/diagram/ui">
+      <fileset dir="${module.src.dir}/org/dbuml/argo/uml/diagram/ui" includes="*.gif"/>
+    </copy>
+    <copy todir="${module.build.dest}/org/dbuml/argo/uml/ui">
+      <fileset dir="${module.src.dir}/org/dbuml/argo/uml/ui" includes="*.gif"/>
+    </copy>
+    <copy todir="${module.build.dest}/org/dbuml/base/controller/ui">
+      <fileset dir="${module.src.dir}/org/dbuml/base/controller/ui" includes="*.form"/>
+    </copy>
+    <copy todir="${module.build.dest}/org/dbuml/base/controller/ui/images">
+      <fileset dir="${module.src.dir}/org/dbuml/base/controller/ui/images" includes="**/**"/>
+    </copy>
+    <copy todir="${module.build.dest}/org/dbuml/base/transform">
+      <fileset dir="${module.src.dir}/org/dbuml/base/transform" includes="*.vm"/>
+    </copy>
+  </target>
+  
+
+  <!-- =================================================================== -->
+  <!-- Compiles the source directory                                       -->
+  <!-- =================================================================== -->
+  <target name="compile" depends="prepare" 
+          description="compiles the module source code"> 
+  	
+    <available file="${argo.build.dir}/argouml.jar" property="argo.is.packaged"/>
+    <fail unless="argo.is.packaged" 
+      message="You must package ArgoUML first, e.g., argouml/src_new> ant package"/>
+
+    <javac srcdir="${module.src.dir}"
+           destdir="${module.build.dest}"
+           includes="org/dbuml/**"
+           excludes="*.txt,*.bat,*.xml,*.sh"
+           debug="${debug}"
+           deprecation="${deprecation}"
+           optimize="${optimize}"
+           source="1.5"
+           target="1.5">
+        <classpath>
+            <path refid="module.compile.classpath"/>
+        </classpath>
+    </javac>
+
+  </target>
+
+  <!-- =================================================================== -->
+  <!-- Creates the class jar                                               -->
+  <!-- =================================================================== -->
+  <target name="jar" depends="init, compile" 
+          description="create the module jar">
+    <filter token="version" value="${module.version}"/>
+    <copy file="${manifest.src}" tofile="${module.build.dest}/${manifest}" filtering="on" overwrite="on" />
+    <jar jarfile="${module.jarfile}"
+         basedir="${module.build.dest}"
+         includes="org/dbuml/**"
+         excludes="*.txt,*.bat,*.xml,*.sh,${manifest}"
+         manifest="${module.build.dest}/${manifest}"/>
+  </target>
+
+  <!-- =================================================================== -->
+  <!-- Run ArgoUML from compiled sources                                   -->
+  <!-- =================================================================== -->
+  <target name="run" depends="init, jar" 
+          description="run ArgoUML using the built module jar">
+    <echo message="--- Executing ${Name} ---"/>
+    <java classname="org.argouml.application.Main"
+          fork="yes">
+      <!-- <sysproperty key="log4j.configuration" value="org/argouml/resource/full_console.lcf"/> -->
+      <classpath>
+        <fileset dir="${argo.build.dir}/ext">
+            <include name="${module.jarfile.name}" />
+        </fileset>
+        <path refid="module.compile.classpath"/>
+        <fileset dir="${module.lib.dir}">
+            <include name="**/*.jar" />
+        </fileset>
+      </classpath>
+
+    </java>
+  </target>
+
+  <!-- =================================================================== -->
+  <!-- Clean targets                                                       -->
+  <!-- =================================================================== -->
+  <target name="clean" depends="init" 
+          description="cleanup all files and directories created by this build script">
+    <delete file="${developer.lib.dir}/ext/${module.jarfile.name}"/>
+    <delete file="${argo.build.dir}/ext/${module.jarfile.name}"/>
+    <delete dir="${module.build.dir}"/>
+   
+  </target>
+
+  <!-- =================================================================== -->
+  <!-- Move the jar file into the extension directory.                     -->
+  <!-- =================================================================== -->
+  <target name="install" depends="init, jar" 
+          description="install the module in the developer build of ArgoUML">
+    <copy todir="${developer.lib.dir}/ext">
+      <fileset dir="${module.build.dir}" includes="${module.jarfile.name}"/>
+    </copy>
+  </target>
+  
+  <!-- =================================================================== -->
+  <!-- Build release-bundle folder with bundled ArgoUML                    -->
+  <!-- =================================================================== -->
+  <target name="release-bundle" depends="init, jar" 
+          description="Build release-bundle folder with bundled ArgoUML">
+    <echo message="Preparing the release-bundle directories"/>
+    
+    <delete dir="${module.release-bundle.dest}"/>
+    
+    <mkdir dir="${module.release-bundle.dest}"/>
+    <copy todir="${module.release-bundle.dest}"
+      file="${module.root}/DB-UML.LICENSE.txt"/>
+    <copy todir="${module.release-bundle.dest}"
+      file="${module.root}/Readme.htm"/>
+    <copy todir="${module.release-bundle.dest}"
+      file="${module.root}/dbuml.bat"/>
+    <copy tofile="${module.release-bundle.dest}/antlrall.jar"
+      file="${argo.root.dir}/lib/antlrall-2.7.2.jar"/>
+    <copy tofile="${module.release-bundle.dest}/commons-logging.jar"
+      file="${argo.root.dir}/lib/commons-logging-1.0.2.jar"/>
+    <copy tofile="${module.release-bundle.dest}/gef.jar"
+      file="${argo.root.dir}/lib/gef-0.12.3.jar"/>
+    <copy tofile="${module.release-bundle.dest}/log4j.jar"
+      file="${argo.root.dir}/lib/log4j-1.2.6.jar"/>
+    <copy tofile="${module.release-bundle.dest}/ocl-argo.jar"
+      file="${argo.root.dir}/lib/ocl-argo-1.1.jar"/>
+    <copy tofile="${module.release-bundle.dest}/swidgets.jar"
+      file="${argo.root.dir}/lib/swidgets-0.1.4.jar"/>
+    <copy tofile="${module.release-bundle.dest}/toolbar.jar"
+      file="${argo.root.dir}/lib/toolbar-1.3.jar"/>
+    <copy todir="${module.release-bundle.dest}"
+      file="${argo.build.dir}/argouml-mdr.jar"/>
+    <copy todir="${module.release-bundle.dest}"
+      file="${argo.build.dir}/argouml.jar"/>
+    <copy todir="${module.release-bundle.dest}"
+      file="${argo.build.dir}/argouml-model.jar"/>
+    <copy todir="${module.release-bundle.dest}"
+      file="${argo.build.dir}/nbmdr.jar"/>
+    <copy todir="${module.release-bundle.dest}"
+      file="${argo.build.dir}/mdrapi.jar"/>
+    <copy todir="${module.release-bundle.dest}"
+      file="${argo.build.dir}/jmi.jar"/>
+    <copy todir="${module.release-bundle.dest}"
+      file="${argo.build.dir}/jmiutils.jar"/>
+    <copy todir="${module.release-bundle.dest}"
+      file="${argo.build.dir}/java-interfaces.jar"/>
+    <copy todir="${module.release-bundle.dest}"
+      file="${argo.build.dir}/openide-util.jar"/>
+    <copy todir="${module.release-bundle.dest}"
+      file="${argo.build.dir}/mof.jar"/>
+    
+    <mkdir dir="${module.release-bundle.dest}/ext"/>    
+    <copy todir="${module.release-bundle.dest}/ext">
+      <fileset dir="${module.root}/lib" includes="**/**"/>
+    </copy>
+    <copy todir="${module.release-bundle.dest}/ext"
+      file="${module.jarfile}"/>
+      
+    <mkdir dir="${module.release-bundle.dest}/www"/>
+    <copy todir="${module.release-bundle.dest}/www">
+      <fileset dir="${module.root}/www" includes="**/**" excludes=".svn/**"/>
+    </copy>
+
+    <mkdir dir="${module.release-bundle.dest}/license"/>
+    <copy todir="${module.release-bundle.dest}/license">
+      <fileset dir="${module.root}/license" includes="**/**" excludes=".svn/**"/>
+    </copy>
+    
+    <mkdir dir="${module.release-bundle.dest}/tests"/>    
+    <copy todir="${module.release-bundle.dest}/tests">
+      <fileset dir="${module.root}/tests" includes="**/**" excludes=".svn/**"/>
+    </copy>
+    
+    <mkdir dir="${module.release-bundle.dest}/tools"/>    
+    <copy todir="${module.release-bundle.dest}/tools">
+      <fileset dir="${module.root}/tools" includes="**/**" excludes=".svn/**"/>
+    </copy>
+ 
+  </target>
+  
+  <!-- =================================================================== -->
+  <!-- Build release folder                                                -->
+  <!-- =================================================================== -->
+  <target name="release" depends="init, jar" 
+          description="Build release DB-UML module">
+    <echo message="Preparing the release directories"/>
+    
+    <delete dir="${module.release.dest}"/>
+    
+    <mkdir dir="${module.release.dest}"/>
+    <copy todir="${module.release.dest}"
+      file="${module.root}/DB-UML.LICENSE.txt"/>
+    <copy todir="${module.release.dest}"
+      file="${module.root}/Readme.htm"/>
+    
+    <mkdir dir="${module.release.dest}/ext"/>    
+    <copy todir="${module.release.dest}/ext">
+      <fileset dir="${module.root}/lib" includes="**/**"/>
+    </copy>
+    <copy todir="${module.release.dest}/ext"
+      file="${module.jarfile}"/>
+      
+    <mkdir dir="${module.release.dest}/www"/>
+    <copy todir="${module.release.dest}/www">
+      <fileset dir="${module.root}/www" includes="**/**" excludes=".svn/**"/>
+    </copy>
+
+    <mkdir dir="${module.release.dest}/license"/>
+    <copy todir="${module.release.dest}/license">
+      <fileset dir="${module.root}/license" includes="**/**" excludes=".svn/**"/>
+    </copy>
+    
+    <mkdir dir="${module.release.dest}/tests"/>    
+    <copy todir="${module.release.dest}/tests">
+      <fileset dir="${module.root}/tests" includes="**/**" excludes=".svn/**"/>
+    </copy>
+    
+    <mkdir dir="${module.release.dest}/tools"/>    
+    <copy todir="${module.release.dest}/tools">
+      <fileset dir="${module.root}/tools" includes="**/**" excludes=".svn/**"/>
+    </copy>
+
+ 
+  </target>
+
+</project>

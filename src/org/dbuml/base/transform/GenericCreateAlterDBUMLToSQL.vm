@@ -1,0 +1,35 @@
+## SQL 92 source template
+##
+##      Generate Database
+##
+#if ($Database)
+/* Alter Database $Database.getFixedName() children */
+##
+##      Alter Schema create.
+##
+#elseif ($Schema)
+## Alter Schema $Schema.getFixedName() 
+##
+##       ALTER TABLE Create for Attributes
+##
+#elseif ($Table)
+#set($colnum = $Table.getColumnsVector().size())
+#if ($colnum > 0)
+#if ($Namespace != "")
+## code added/modified for Namespace / Schema by sbalda on 11/14
+/* ALTER TABLE $Namespace.$Table.getFixedName()    */	
+ALTER TABLE $Namespace.$Table.getFixedName()
+#else
+/* ALTER TABLE $Table.getFixedName()    */
+ALTER TABLE $Table.getFixedName()
+#end
+##modified "addd" to "add" here 11/17 by sbalda
+ADD ATTRIBUTE 
+#foreach ($nextColumn in $Table.getColumnsVector())
+#ColumnDef ($nextColumn) #if ($velocityCount < $colnum), 
+##$nextColumn.getName() $nextColumn.getTypeName()($nextColumn.getLength(), $nextColumn.getScale()) $nextColumn.getDefault() #if ($velocityCount < $colnum), 
+#end
+#end
+;
+#end
+#end

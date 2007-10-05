@@ -1,0 +1,15 @@
+## SQL 92 source template
+#if ($Table)
+#set($colnum = $Table.getColumnsVector().size())
+#if ($colnum >0)
+#if ($Namespace != "")
+## code for Schema added/ modified by sbalda on 11/14
+/* Drop Table $Namespace.$Table.getFixedName()    */	
+drop table $Namespace.$Table.getFixedName() cascade constraints;
+#else
+## Added by Rashmi Gupta to avoid the dropping of silently imported tables 
+/* Drop Table $Table.getFixedName()    */	
+drop table $Table.getFixedName(); 
+#end
+#end
+#end

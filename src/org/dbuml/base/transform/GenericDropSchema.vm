@@ -1,0 +1,10 @@
+## SQL 92 source template
+#if ($Schema)
+#if ($Namespace != "")
+## code for Schema is added on 11/14
+/* DROP SCHEMA $Schema.getFixedName() */	
+DROP SCHEMA $Schema.getFixedName();	
+#else
+/* Owning database does not support Schemas or the namespace is the default Schema */
+#end
+#end

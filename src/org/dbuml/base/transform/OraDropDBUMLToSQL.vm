@@ -1,0 +1,48 @@
+## SQL 92 source template
+##
+##      Drop Database
+##
+#if ($Database)
+/* Drop Database $Database.getFixedName() */
+##
+##      Drop Schema
+##
+#elseif ($Schema)
+/* Drop Schema $Schema.getFixedName() */
+drop Schema $Schema.getFixedName();
+##added ";" to above line (by sbalda on 11/14)
+#if ($Namespace != "")
+##drop schema $Schema.getFixedName();
+#else
+/* Owning database does not support Schemas or the namespace is the default Schema */
+#end
+##
+##       Drop Table
+##
+#elseif ($Table)
+#set($colnum = $Table.getColumnsVector().size())
+#if ($colnum >0)
+## made changes to see that tables have the qualified Schema name. By sbalda on 11/14
+#if ($Namespace != "")
+/* Drop Table $Namespace.$Table.getFixedName()    */
+drop table $Namespace.$Table.getFixedName() cascade constraints;
+#else
+## Added by Rashmi Gupta to avoid the dropping of silently imported tables 
+/* Drop Table $Table.getFixedName()    */
+drop table $Table.getFixedName(); 
+#end
+#end
+##
+##       Drop View
+##
+#elseif ($View)
+#if($Namespace !="")
+## made changes/ modified this condition by sbalda (11/14)
+## purpose: the views contain the Schema
+/* Drop View $Namespace.$View.getFixedName() */
+drop view $Namespace.$View.getFixedName();
+#else
+/* Drop View $View.getFixedName() */
+drop view $View.getFixedName();
+#end
+#end

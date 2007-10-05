@@ -1,0 +1,30 @@
+## SQL 92 source template
+##
+##      Create Database top
+##
+#if ($Database)
+/* Create Database $Database.getFixedName() */
+##
+##      Create Schema top.  Same as Create Schema
+##
+#elseif ($Schema)
+## Create Schema $Schema.getFixedName()   
+#if ($Namespace != "")
+##create schema $Schema.getFixedName() authorization $Schema.getFixedName(); ##11/23
+CREATE SCHEMA $Schema.getFixedName();
+#else
+## modified by sbalda 11/14
+/* Owning database does not support Schemas or the namespace is the default Schema */	
+#end
+##
+##       Create Table top
+##
+#elseif ($Table)
+#if ($Namespace != "")
+/* CREATE TABLE $Namesapce.$Table.getFixedName()    */
+CREATE TABLE $Namespace.$Table.getFixedName();
+#else
+/* CREATE TABLE $Table.getFixedName()    */
+CREATE TABLE $Table.getFixedName();
+#end
+#end

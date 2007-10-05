@@ -1,0 +1,45 @@
+## SQL 92 source template
+##
+##      DROP Database
+##
+#if ($Database)
+/* DROP Database $Database.getFixedName() */
+##
+##      DROP Schema
+##
+#elseif ($Schema)
+#if ($Namespace != "")
+## code for Schema is added on 11/14
+/* DROP SCHEMA $Schema.getFixedName() */	
+DROP SCHEMA $Schema.getFixedName();	
+#else
+/* Owning database does not support Schemas or the namespace is the default Schema */
+#end
+##
+##       DROP Table
+##
+#elseif ($Table)
+#set($colnum = $Table.getColumnsVector().size())
+#if ($colnum >0)
+#if ($Namespace != "")
+## code for Schema added/ modified by sbalda on 11/14
+/* DROP TABLE $Namespace.$Table.getFixedName()    */	
+DROP TABLE $Namespace.$Table.getFixedName() cascade;
+#else
+## Added by Rashmi Gupta to avoid the dropping of silently imported tables 
+/* DROP TABLE $Table.getFixedName()    */	
+DROP TABLE $Table.getFixedName(); 
+#end
+#end
+##
+##       DROP View
+##
+#elseif ($View)
+#if ($Namespace !="")
+/* DROP VIEW  $Namespace.$View.getFixedName() */
+DROP VIEW $Namespace.$View.getFixedName();	
+#else
+/* DROP VIEW  $View.getFixedName() */
+DROP VIEW $View.getFixedName();
+#end
+#end

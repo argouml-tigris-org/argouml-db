@@ -1,0 +1,14 @@
+Manifest-Version: 1.0
+Class-Path: commons-collections-3.0.jar velocity-1.4.jar
+Created-By: Cincom Systems Inc.
+
+Name: org/dbuml/argo/uml/ui/DBModule.class
+Specification-Title: DBUML Database Modeling
+Implementation-Title: DBUML Database Modeling
+Specification-Vendor: Cincom Systems Inc.
+Specification-Version: 1.0
+Extension-name: module.tools.test
+Implementation-Version: 1.0
+Implementation-Vendor: Cincom Systems Inc.
+
+
