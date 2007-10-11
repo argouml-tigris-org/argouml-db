@@ -207,6 +207,19 @@ the generation of SQL statements and generation of UML models from database cata
     <delete dir="${module.build.dir}"/>
    
   </target>
+  
+  <!-- =================================================================== -->
+  <!-- Clean targets                                                       -->
+  <!-- =================================================================== -->
+  <target name="clean-all" depends="clean" 
+          description="cleanup all files and directories created by release tasks.">
+
+    <delete dir="${module.release-bundle.dest}"/>
+    <delete dir="${module.release.dest}"/>
+    <delete dir="${module.root}/tools/pmd/results"/>
+
+  </target>
+
 
   <!-- =================================================================== -->
   <!-- Move the jar file into the extension directory.                     -->
@@ -217,7 +230,7 @@ the generation of SQL statements and generation of UML models from database cata
       <fileset dir="${module.build.dir}" includes="${module.jarfile.name}"/>
     </copy>
   </target>
-  
+
   <!-- =================================================================== -->
   <!-- Build release-bundle folder with bundled ArgoUML                    -->
   <!-- =================================================================== -->
@@ -228,10 +241,7 @@ the generation of SQL statements and generation of UML models from database cata
     <delete dir="${module.release-bundle.dest}"/>
     
     <mkdir dir="${module.release-bundle.dest}"/>
-    <copy todir="${module.release-bundle.dest}"
-      file="${module.root}/DB-UML.LICENSE.txt"/>
-    <copy todir="${module.release-bundle.dest}"
-      file="${module.root}/Readme.htm"/>
+    
     <copy todir="${module.release-bundle.dest}"
       file="${module.root}/dbuml.bat"/>
     <copy tofile="${module.release-bundle.dest}/antlrall.jar"
@@ -269,35 +279,12 @@ the generation of SQL statements and generation of UML models from database cata
     <copy todir="${module.release-bundle.dest}"
       file="${argo.build.dir}/mof.jar"/>
     
-    <mkdir dir="${module.release-bundle.dest}/ext"/>    
-    <copy todir="${module.release-bundle.dest}/ext">
-      <fileset dir="${module.root}/lib" includes="**/**"/>
-    </copy>
-    <copy todir="${module.release-bundle.dest}/ext"
-      file="${module.jarfile}"/>
-      
-    <mkdir dir="${module.release-bundle.dest}/www"/>
-    <copy todir="${module.release-bundle.dest}/www">
-      <fileset dir="${module.root}/www" includes="**/**" excludes=".svn/**"/>
-    </copy>
+    <property name="release.dest" value="${module.release-bundle.dest}"/>
 
-    <mkdir dir="${module.release-bundle.dest}/license"/>
-    <copy todir="${module.release-bundle.dest}/license">
-      <fileset dir="${module.root}/license" includes="**/**" excludes=".svn/**"/>
-    </copy>
+    <antcall target="copy-common-dirs"/>
     
-    <mkdir dir="${module.release-bundle.dest}/tests"/>    
-    <copy todir="${module.release-bundle.dest}/tests">
-      <fileset dir="${module.root}/tests" includes="**/**" excludes=".svn/**"/>
-    </copy>
-    
-    <mkdir dir="${module.release-bundle.dest}/tools"/>    
-    <copy todir="${module.release-bundle.dest}/tools">
-      <fileset dir="${module.root}/tools" includes="**/**" excludes=".svn/**"/>
-    </copy>
- 
   </target>
-  
+
   <!-- =================================================================== -->
   <!-- Build release folder                                                -->
   <!-- =================================================================== -->
@@ -308,39 +295,94 @@ the generation of SQL statements and generation of UML models from database cata
     <delete dir="${module.release.dest}"/>
     
     <mkdir dir="${module.release.dest}"/>
-    <copy todir="${module.release.dest}"
+
+    <property name="release.dest" value="${module.release.dest}"/>
+
+    <antcall target="copy-common-dirs"/>
+    
+  </target>
+
+  <!-- =================================================================== -->
+  <!-- Build release folder                                                -->
+  <!-- =================================================================== -->
+  <target name="release-all" 
+          description="Build all releases of DB-UML module.">
+
+    <echo message="Building DB-UML releases."/>
+
+    <antcall target="release"/>
+    <antcall target="release-bundle"/>
+  </target>
+
+  
+  <!-- =================================================================== -->
+  <!-- Copy common release directories                                     -->
+  <!-- =================================================================== -->
+  <target name="copy-common-dirs" 
+          description="Copy common release directories">
+    
+    <copy todir="${release.dest}"
       file="${module.root}/DB-UML.LICENSE.txt"/>
-    <copy todir="${module.release.dest}"
+    <copy todir="${release.dest}"
       file="${module.root}/Readme.htm"/>
     
-    <mkdir dir="${module.release.dest}/ext"/>    
-    <copy todir="${module.release.dest}/ext">
+    <mkdir dir="${release.dest}/ext"/>    
+    <copy todir="${release.dest}/ext">
       <fileset dir="${module.root}/lib" includes="**/**"/>
     </copy>
-    <copy todir="${module.release.dest}/ext"
+    <copy todir="${release.dest}/ext"
       file="${module.jarfile}"/>
       
-    <mkdir dir="${module.release.dest}/www"/>
-    <copy todir="${module.release.dest}/www">
+    <mkdir dir="${release.dest}/www"/>
+    <copy todir="${release.dest}/www">
       <fileset dir="${module.root}/www" includes="**/**" excludes=".svn/**"/>
     </copy>
 
-    <mkdir dir="${module.release.dest}/license"/>
-    <copy todir="${module.release.dest}/license">
+    <mkdir dir="${release.dest}/license"/>
+    <copy todir="${release.dest}/license">
       <fileset dir="${module.root}/license" includes="**/**" excludes=".svn/**"/>
     </copy>
     
-    <mkdir dir="${module.release.dest}/tests"/>    
-    <copy todir="${module.release.dest}/tests">
+    <mkdir dir="${release.dest}/tests"/>    
+    <copy todir="${release.dest}/tests">
       <fileset dir="${module.root}/tests" includes="**/**" excludes=".svn/**"/>
     </copy>
     
-    <mkdir dir="${module.release.dest}/tools"/>    
-    <copy todir="${module.release.dest}/tools">
+    <mkdir dir="${release.dest}/tools"/>    
+    <copy todir="${release.dest}/tools">
       <fileset dir="${module.root}/tools" includes="**/**" excludes=".svn/**"/>
     </copy>
 
- 
+  </target>
+
+
+  <!-- =================================================================== -->
+  <!-- Check PMD violation                                                 -->
+  <!-- =================================================================== -->
+  
+  <target name="init-pmd" depends="init" 
+         description="initializes the Ant script environment for PMD">
+      <property name="module.tools" value="${module.root}/tools"/>
+      <property name="pmd.dir" value="${module.tools}/pmd/pmd-4.0"/>
+      
+      <path id ="pmd.classpath">
+          <fileset dir="${pmd.dir}/lib/">
+              <include name="*.jar"/>
+          </fileset>
+      </path>
+      <taskdef name="pmd" classname="net.sourceforge.pmd.ant.PMDTask" classpathref="pmd.classpath"/>
+      
+      <mkdir dir="${module.tools}/pmd/results"/>
+      <property name="pmd.results" value="${module.tools}/pmd/results"/>
+  </target>
+             
+  <target name="check-pmd" depends="init-pmd">
+      <pmd rulesetfiles="${module.tools}/pmd/pmd-dbuml.xml">
+          <formatter type="html" toFile="${pmd.results}/pmd-report.html"/>  
+          <fileset dir="${module.src.dir}/org/dbuml/">
+              <include name="**/*.java"/>
+          </fileset>
+      </pmd>
   </target>
 
 </project>
