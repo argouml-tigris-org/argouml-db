@@ -129,8 +129,8 @@ the generation of SQL statements and generation of UML models from database cata
     <copy todir="${module.build.dest}/org/dbuml/base/controller/ui/images">
       <fileset dir="${module.src.dir}/org/dbuml/base/controller/ui/images" includes="**/**"/>
     </copy>
-    <copy todir="${module.build.dest}/org/dbuml/base/transform">
-      <fileset dir="${module.src.dir}/org/dbuml/base/transform" includes="*.vm"/>
+    <copy todir="${module.build.dest}/org/dbuml/base/transform/templates">
+      <fileset dir="${module.src.dir}/org/dbuml/base/transform/templates" includes="**/**" excludes=".svn/**"/>
     </copy>
   </target>
   
