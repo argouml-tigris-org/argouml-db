@@ -5,13 +5,12 @@
 #if ($View)
 #set($queryStr = $View.getQueryString())
 #if ($queryStr != "") 
-## added $Namespace.$View.getFixedName() 11/14	& made few changes in this condition.
 /* Create View $Namespace.$View.getFixedName() */   
 ##create view $View.getFixedName()		
 CREATE VIEW $Namespace.$View.getFixedName()	
 #set($colnum = $View.getColumnsVector().size())
 #if ($colnum > 0)
-(#foreach ($nextColumn in $View.getColumnsVector())$nextColumn.getFixedName() #if ($velocityCount < $colnum),#end #end)
+(#foreach ($nextColumn in $View.getColumnsVector())$nextColumn.getFixedName()#if ($velocityCount < $colnum),#end #end)
 #end
 as
 $queryStr

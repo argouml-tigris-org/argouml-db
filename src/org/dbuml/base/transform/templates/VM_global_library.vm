@@ -7,6 +7,6 @@
 #set($colSize = $col.getLength())
 #set($colScale = $col.getScale())
 #set($colDefault = $col.getDefault()) 
-    $col.getFixedName()  $col.getTypeName()#if ($colSize > 0)($colSize#if ($colScale > 0),$colScale#end)#end #if ($colDefault !="") DEFAULT '$colDefault' #end  #if (!($col.allowsNulls())) NOT NULL#end
+    $col.getFixedName() $col.getTypeName()#if ($colSize > 0)($colSize#if ($colScale > 0),$colScale#end)#end#if ($colDefault !="") DEFAULT '$colDefault'#end#if (!($col.allowsNulls())) NOT NULL#end
 #end
 #######################################################################################

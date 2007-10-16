@@ -81,52 +81,114 @@ public class GenericDBUMLToSQL extends DBUMLToSQL {
      */
     private Template templateCreateViews;
     
+    private static final String TEMPLATES_DIR = 
+            "org/dbuml/base/transform/templates/";
+    
     
     /** Creates a new instance of DBMetadataToDBUML */
     public GenericDBUMLToSQL() {
         //
         //  Make instance of Velocity engine for this transformer
         //
-        
         engine = new VelocityEngine();
         
         try {
            
             engine.init(getEngineProperties());
             
-            initTemplateDropTables(
-                    "org/dbuml/base/transform/GenericDropTables.vm");
+            initTemplateDropTables(getTemplatePathDropTable());
             
-            initTemplateDropViews(
-                    "org/dbuml/base/transform/GenericDropViews.vm"); 
+            initTemplateDropViews(getTemplatePathDropView());
             
-            initTemplateDropSchema(
-                    "org/dbuml/base/transform/GenericDropSchema.vm");
+            initTemplateDropSchema(getTemplatePathDropSchema());
             
-            initTemplateCreateSchema(
-                    "org/dbuml/base/transform/GenericCreateSchema.vm");
+            initTemplateCreateSchema(getTemplatePathCreateSchema());
             
-            initTemplateCreateTables(
-                    "org/dbuml/base/transform/GenericCreateTables.vm");
+            initTemplateCreateTables(getTemplatePathCreateTable());
             
-            initTemplateCreateViews(
-                    "org/dbuml/base/transform/GenericCreateViews.vm");
+            initTemplateCreateViews(getTemplatePathCreateView());
             
-            initTemplateCreateAlter(
-                    "org/dbuml/base/transform/GenericCreateAlterDBUMLToSQL.vm");
+            initTemplateCreateAlter(getTemplatePathAlter());
             
-            initTemplateCreateTop(
-                    "org/dbuml/base/transform/GenericCreateTopDBUMLToSQL.vm");
-             
-            initTemplateCreateAlterConstraints(
-                     "org/dbuml/base/transform/GenericCreateAlterConstraintsDBUMLToSQL.vm");
+            initTemplateCreateTop(getTemplatePathCreateTop());
             
-            initTemplateCreateAlterFKConstraints(
-                     "org/dbuml/base/transform/GenericCreateAlterFKConstraintsDBUMLToSQL.vm"); 
+            initTemplateCreateAlterConstraints(getTemplatePathAlterConstraints());
+                    
+            initTemplateCreateAlterFKConstraints(getTemplatePathAlterFKConstraints()); 
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+    
+    /** Gets path to Velocity template for creating tables.
+     *@return the template path such as "org/dbuml/base/transform/templates/<name>.vm" 
+     */
+    protected String getTemplatePathCreateTable() {
+        return TEMPLATES_DIR + "GenericCreateTables.vm";     
+    }
+    
+    /** Gets path to Velocity template for dropping tables.
+     *@return the template path such as "org/dbuml/base/transform/templates/<name>.vm" 
+     */
+    protected String getTemplatePathDropTable() {
+        return TEMPLATES_DIR + "GenericDropTables.vm";     
+    }
+    
+    /** Gets path to Velocity template for creating views.
+     *@return the template path such as "org/dbuml/base/transform/templates/<name>.vm" 
+     */
+    protected String getTemplatePathCreateView() {
+        return TEMPLATES_DIR + "GenericCreateViews.vm";     
+    }
+    
+    /** Gets path to Velocity template for dropping views.
+     *@return the template path such as "org/dbuml/base/transform/templates/<name>.vm" 
+     */
+    protected String getTemplatePathDropView() {
+        return TEMPLATES_DIR + "GenericDropViews.vm";     
+    }
+    
+    /** Gets path to Velocity template for creating schemas.
+     *@return the template path such as "org/dbuml/base/transform/templates/<name>.vm" 
+     */
+    protected String getTemplatePathCreateSchema() {
+        return TEMPLATES_DIR + "GenericCreateSchema.vm";     
+    }
+    
+    /** Gets path to Velocity template for dropping schemas.
+     *@return the template path such as "org/dbuml/base/transform/templates/<name>.vm" 
+     */
+    protected String getTemplatePathDropSchema() {
+        return TEMPLATES_DIR + "GenericDropSchema.vm";     
+    }
+    
+    /** Gets path to Velocity template for altering top database entities.
+     *@return the template path such as "org/dbuml/base/transform/templates/<name>.vm" 
+     */
+    protected String getTemplatePathAlter() {
+        return TEMPLATES_DIR + "GenericCreateAlterDBUMLToSQL.vm";     
+    }
+    
+    /** Gets path to Velocity template for creating top database entities.
+     *@return the template path such as "org/dbuml/base/transform/templates/<name>.vm" 
+     */
+    protected String getTemplatePathCreateTop() {
+        return TEMPLATES_DIR + "GenericCreateTopDBUMLToSQL.vm";     
+    }
+    
+    /** Gets path to Velocity template for altering constraints.
+     *@return the template path such as "org/dbuml/base/transform/templates/<name>.vm" 
+     */
+    protected String getTemplatePathAlterConstraints() {
+        return TEMPLATES_DIR + "GenericCreateAlterConstraintsDBUMLToSQL.vm";     
+    }
+    
+    /** Gets path to Velocity template for altering foreign key constraints.
+     *@return the template path such as "org/dbuml/base/transform/templates/<name>.vm" 
+     */
+    protected String getTemplatePathAlterFKConstraints() {
+        return TEMPLATES_DIR + "GenericCreateAlterFKConstraintsDBUMLToSQL.vm";     
+    }   
     
     /** Initializes template. It gets a Velocitity template for the given .vm file.
      *@param vmTemplateName Path to .vm file.
@@ -296,7 +358,7 @@ public class GenericDBUMLToSQL extends DBUMLToSQL {
     
     /** Gets Velocity template for altering foreign key constraints.
      *@return alter foreign key constraints template.
-     */
+    */
     public Template getTemplateCreateAlterFKConstraints() {
         return templateCreateAlterFKConstraints;
     }
@@ -432,7 +494,7 @@ public class GenericDBUMLToSQL extends DBUMLToSQL {
         prop.setProperty("class.resource.loader.class",
                 "org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader");
         prop.setProperty("velocimacro.library",
-                "org/dbuml/base/transform/VM_global_library.vm");
+                TEMPLATES_DIR + "VM_global_library.vm");
         prop.setProperty("velocimacro.permissions.allow.inline", "true");
         prop.setProperty("velocimacro.permissions.allow.inline.global.scope",
                 "true");

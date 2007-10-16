@@ -9,19 +9,31 @@ package org.dbuml.base.transform;
  *
  * @author  rgupta
  */
-public class OraDBUMLToSQL extends GenericDBUMLToSQL { 
+public class OraDBUMLToSQL extends GenericDBUMLToSQL {
+    private static final String TEMPLATES_DIR = 
+            "org/dbuml/base/transform/templates/oracle";
     
     /** Creates a new instance of OraDBUMLToSQL */
     public OraDBUMLToSQL() {
         super();
-        try {
-            initTemplateDropSchema("org/dbuml/base/transform/OraDropSchema.vm");
-            initTemplateCreateSchema(
-                    "org/dbuml/base/transform/OraCreateSchema.vm");
-            
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
+    
+    /** Gets path to Velocity template for dropping schemas.
+     *@return the template path such as "org/dbuml/base/transform/templates/<name>.vm" 
+     */
+    protected String getTemplatePathDropSchema() {
+        return TEMPLATES_DIR + "OraDropSchema.vm";     
+    }
+    
+    /** Gets path to Velocity template for creating schemas.
+     *@return the template path such as "org/dbuml/base/transform/templates/oracle/<name>.vm" 
+     */
+    protected String getTemplatePathCreateSchema() {
+        return TEMPLATES_DIR + "OraCreateSchema.vm";     
+    }
+    
+    
+    
+    
     
 }
