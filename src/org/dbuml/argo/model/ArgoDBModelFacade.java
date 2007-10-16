@@ -34,7 +34,6 @@ import org.dbuml.base.model.DBAssociation;
 import org.dbuml.base.model.DBDerive;
 import org.dbuml.base.factory.Factory;
 
-//import java.util.*;
 import org.apache.log4j.Logger;
 
 /**
@@ -51,7 +50,7 @@ public class ArgoDBModelFacade extends DBModelFacade {
     }
     
     /**
-     * Get instance.  This is set by implementing class *
+     * Get instance.  This is set by the implementing class.
      * @return The DBModelFacade.
      */
     public static DBModelFacade getInstance() {
@@ -62,7 +61,6 @@ public class ArgoDBModelFacade extends DBModelFacade {
     }
     
     /** Recognizer for model elements representing Schemas
-     *
      * @param handle candidate
      * @return true if model element represents Schemas
      */
@@ -80,7 +78,6 @@ public class ArgoDBModelFacade extends DBModelFacade {
     }
     
     /** Recognizer for model elements representing Databases
-     *
      * @param handle candidate
      * @return true if model element represents Databases
      */
@@ -98,7 +95,6 @@ public class ArgoDBModelFacade extends DBModelFacade {
     }
     
     /** Recognizer for model elements representing Registries
-     *
      * @param handle candidate
      * @return true if model element represents Registries
      */
@@ -115,8 +111,7 @@ public class ArgoDBModelFacade extends DBModelFacade {
         return status;
     }
     
-    /** Recognizer for model elements representing Tables
-     *
+    /** Recognizer for model elements representing Tables.
      * @param handle candidate
      * @return true if model element represents a Table
      */
@@ -134,7 +129,6 @@ public class ArgoDBModelFacade extends DBModelFacade {
     }
     
     /** Recognizer for model elements representing Views
-     *
      * @param handle candidate
      * @return true if model element represents a View
      */
@@ -151,8 +145,7 @@ public class ArgoDBModelFacade extends DBModelFacade {
         return status;
     }
     
-    /** Recognizer for model elements representing Columns
-     *
+    /** Recognizer for model elements representing Columns.
      * @param handle candidate
      * @return true if model element represents a Column
      */
@@ -200,8 +193,7 @@ public class ArgoDBModelFacade extends DBModelFacade {
         return status;  
     }
     
-    /** Recognizer for model elements representing FKey link
-     *
+    /** Recognizer for model elements representing FKey link.
      * @param handle candidate
      * @return true if model element represents a Column
      */
@@ -219,7 +211,6 @@ public class ArgoDBModelFacade extends DBModelFacade {
     }
     
     /** Recognizer for model elements representing View dependency
-     *
      * @param handle candidate
      * @return true if model element represents a View dependency.
      */
@@ -271,7 +262,6 @@ public class ArgoDBModelFacade extends DBModelFacade {
      * @param parentName The node name or null if the the database is 
      * not within a node.
      * @param dbName the databse name.
-     *
      * @return Database
      */
     public Database findDatabase(String parentName, String dbName) {
@@ -284,7 +274,6 @@ public class ArgoDBModelFacade extends DBModelFacade {
         } else { 
             parentModel = projectModel;
         }
-        
         Object database = Model.getFacade().lookupIn(parentModel, dbName);
         return ((database != null) ? getDatabase(database) : null);
     }
@@ -406,9 +395,8 @@ public class ArgoDBModelFacade extends DBModelFacade {
         return parent;
     }
     
-    // tableLike are table, view, etc ..
     /**
-     * Gets the schema for table like models.
+     * Gets the schema for table like models. Table Like are table, view, etc ..
      * @param element A model for a table or view.
      * @return The schema model or null.
      */
@@ -464,9 +452,6 @@ public class ArgoDBModelFacade extends DBModelFacade {
                     }
                 }
             }
-            //
-            //  Todo: add Key children of Tables
-            //
         }
         return vChildren;
     }
@@ -501,10 +486,8 @@ public class ArgoDBModelFacade extends DBModelFacade {
         return getChildren(element);
     }
     
-    private Object getParentForSchema(Object element) {
-        
-        Object parent = null;
-        
+    private Object getParentForSchema(Object element) {    
+        Object parent = null;    
         if (representsASchema(element) && !representsASchema(
                 Model.getFacade().getNamespace(element))) {
         
@@ -659,13 +642,9 @@ public class ArgoDBModelFacade extends DBModelFacade {
      * @param handle the model object. 
      */
     public Database getDatabase(Object handle) {
-        if (!(representsADatabase(handle))) {
-            return null;
-        }
-        
+        if (!(representsADatabase(handle))) { return null; } 
         return new Database(Model.getFacade().getName(handle),
-                handle,
-                getTags(handle));
+                handle, getTags(handle));
     }
     
     /**
@@ -676,13 +655,9 @@ public class ArgoDBModelFacade extends DBModelFacade {
      * @param handle The model object.
      */
     public Registry getRegistry(Object handle) {
-        if (!(representsARegistry(handle))) {
-            return null;
-        }
-        
+        if (!(representsARegistry(handle))) { return null; }   
         return new Registry(Model.getFacade().getName(handle),
-                handle,
-                getTags(handle));
+                handle, getTags(handle));
     }
     
     /** It clears this table before updating. It removes attributes
@@ -807,8 +782,7 @@ public class ArgoDBModelFacade extends DBModelFacade {
                 Object baseTableOwner = objOwner;
                 if (tSchema != null) {
                     // get the identified scheama or create it. 
-                    // Its parent should
-                    // be the contained database.
+                    // Its parent should be the contained database.
                     baseTableOwner = this.lookupIn(
                         this.getParent(objOwner), tSchema);
                     if (baseTableOwner == null) {
@@ -819,7 +793,6 @@ public class ArgoDBModelFacade extends DBModelFacade {
                     }
                 }
                 this.addTable(baseTable, baseTableOwner);
-                
                 baseModel = baseTable.getModelElement();
             }
             Object dep = Model.getCoreFactory().buildDependency(
@@ -915,13 +888,12 @@ public class ArgoDBModelFacade extends DBModelFacade {
      * @param tableModel The table model.
      */
     public void addConstraintNotNull(String columnName, Object tableModel) {
-        Object mc = buildConstraintNotnull(
+        Object mc = buildConstraintNotnull( 
             Model.getFacade().getName(tableModel),
             columnName);
         addConstraintToModel(mc, tableModel);
     }
     
-    //add constraint mc to model
     private void addConstraintToModel(Object mc, Object model) {
         if (mc != null) {
             Model.getCoreHelper().addConstraint(model, mc  );
@@ -933,7 +905,6 @@ public class ArgoDBModelFacade extends DBModelFacade {
     
     private Object buildConstraintNotnull(String context, String attrName) {
         StringBuffer buf = new StringBuffer(50);
-//        StringBuffer buf = new StringBuffer("context ");
         buf.append("context ");
         buf.append(context);
         buf.append(" inv ");
@@ -953,14 +924,11 @@ public class ArgoDBModelFacade extends DBModelFacade {
         if (setOfColNames.size() == 0) {
             return null;
         }
-        
         StringBuffer buf = new StringBuffer("context ");
         buf.append(context);
         buf.append(" inv ");
         Iterator it = setOfColNames.iterator();
-        
         String colName = (String) it.next();
-        
         String constraintName = indexName.toLowerCase(); // argo's OCL
         buf.append(constraintName);
         buf.append(": ");
@@ -1023,12 +991,10 @@ public class ArgoDBModelFacade extends DBModelFacade {
                     column.getTypeNameJdbc().toUpperCase(), false);
             }
         }
-        
         Object model =
                 ProjectManager.getManager().getCurrentProject().getModel();
         Object mAttr =
                 Model.getCoreFactory().buildAttribute(tableModel, model, mType);
-        
         column.setModelElement(mAttr);
         this.updateDBElement(column);
     }
@@ -1176,16 +1142,10 @@ public class ArgoDBModelFacade extends DBModelFacade {
         try {
             Object asso = Model.getUmlFactory().buildConnection(
                     Model.getMetaTypes().getAssociation(),
-                    from,
-                    null,
-                    to,
-                    null,
-                    Boolean.TRUE,
-                    null);
+                    from, null, to, null, Boolean.TRUE, null);
             Model.getCoreHelper().setName(asso,  name);
             return asso;
         } catch (Exception e) {
-            //Internal error
             LOG.debug (e.getMessage());
         }
         return null;
@@ -1388,10 +1348,6 @@ public class ArgoDBModelFacade extends DBModelFacade {
      * @param column A <code>Column</code> instance.
      **/
     public void updateColumn(Column column) {
-        //
-        //  Columns not only have stereotypes and tag values but also types.
-        // So set the type.
-        //
         Project p = ProjectManager.getManager().getCurrentProject();
         Object mType = null;
         String typeName = column.getTypeName();
@@ -1407,21 +1363,16 @@ public class ArgoDBModelFacade extends DBModelFacade {
         Model.getCoreHelper().setType(column.getModelElement(), mType);
         updateDBElement(column);
     }
-    
-    
+       
     /**
      * Makes <code>Schema</code> from model object.
      * @param handle The object model.
      * @return An <code>Schema</code> object.
      */
     public Schema getSchema(Object handle) {
-        if (!(representsASchema(handle))) {
-            return null;
-        }
-        
+        if (!(representsASchema(handle))) { return null; }
         return new Schema(Model.getFacade().getName(handle),
-                handle,
-                getTags(handle));
+                handle, getTags(handle));
     }
     
    /** Makes Table from model object.
@@ -1430,14 +1381,9 @@ public class ArgoDBModelFacade extends DBModelFacade {
      * @return Table A table object.
      */
     public Table getTable(Object handle) {
-        if (!(representsATable(handle))) {
-            return null;
-        }
-        
+        if (!(representsATable(handle))) { return null; }
         Table table = newTable(Model.getFacade().getName(handle),
-                handle,
-                getTags(handle));
-        
+                handle, getTags(handle)); 
         this.getTableColumnsFromModel(table, true);
         return table;
         
@@ -1449,31 +1395,22 @@ public class ArgoDBModelFacade extends DBModelFacade {
     }
     
     /**
-     * Make Table from model object without associations.
-     * 
+     * Make Table from model object without associations. </p>
      * Used when getting tables that are related to a table by
      * foreign keys, etc.
-     * This prevents loops when there are circular associations
-     * 
-     * 
+     * This prevents loops when there are circular associations.
      * @return Table A Table object.
      * @param handle An object model. 
      */
     public Table getTableNoAssoc(Object handle) {
-        if (!(representsATable(handle))) {
-            return null;
-        }
-        
+        if (!(representsATable(handle))) { return null; } 
         Table table = newTable(Model.getFacade().getName(handle),
-                handle,
-                getTags(handle));
-        
+                handle, getTags(handle));
         this.getTableColumnsFromModel(table, false);
         return table;
     }
     
-    /** It converts attributes models into <code>Column</code> objects.
-     * 
+    /** Converts attributes models into <code>Column</code> objects.
      * @param table The table that wons the columns.
      * @param bAssoc Flag for whether or not to model associations.
      */
@@ -1490,24 +1427,16 @@ public class ArgoDBModelFacade extends DBModelFacade {
     }
     
     /**
-     * Make View from model object
-     * 
+     * Makes <code>View</code> from model object. 
      * @param handle Object model. 
      * @return View The view Object. 
      */
     public View getView(Object handle) {
-        if (!(representsAView(handle))) {
-            return null;
-        }
-        
+        if (!(representsAView(handle))) {return null; }
         View view = newView(Model.getFacade().getName(handle),
-                handle,
-                getTags(handle));
-        
-        this.getTableColumnsFromModel(view, true);
-        
+                handle, getTags(handle));
+        this.getTableColumnsFromModel(view, true); 
         return view;
-        
     }
     
     private void addConstraintsToAttributes(Table table) {
@@ -1616,8 +1545,7 @@ public class ArgoDBModelFacade extends DBModelFacade {
                 getTags(handle));
     }
     
-    /**Creates a new <code>View</code> object.
-     * 
+    /**Creates a new <code>View</code> object. 
      * @param sName  The view name.
      * @param handle The model object of the view.
      * @param properties The properties for the view.
@@ -1625,8 +1553,7 @@ public class ArgoDBModelFacade extends DBModelFacade {
      */
     protected View newView(String sName, Object handle, Properties properties) {
         return new View(Model.getFacade().getName(handle),
-                handle,
-                getTags(handle));
+                handle, getTags(handle));
     }
     
     /**Creates a new <code>Column</code> object.
@@ -1652,9 +1579,7 @@ public class ArgoDBModelFacade extends DBModelFacade {
      * @param handle object model.
      */
     public Column getColumnPartially(Object handle, boolean bAssoc) {
-        if (!(representsAColumn(handle))) {
-            return null;   
-        }
+        if (!(representsAColumn(handle))) { return null; }
         
         Column col = newColumn(Model.getFacade().getName(handle),
                 handle,
@@ -1671,27 +1596,19 @@ public class ArgoDBModelFacade extends DBModelFacade {
             if (name.equals(PKeyInterface.PK)) {
                 // create a PKey and add it to the column
                 PKey key = this.getPKey(handle);
-                if (key != null) {
-                    col.setKey(key);
-                }
+                if (key != null) { col.setKey(key); }
             } else if ((name.equals(PKeyInterface.FK) && bAssoc)) {
                 // create a FKey and add it to col
                 FKey key = this.getFKey(handle);
-                if (key != null) {
-                    col.setKey(key);
-                }
+                if (key != null) { col.setKey(key); }
             } else if ((name.equals(PKeyInterface.PFK) && bAssoc)) {
                 // 1.create a PKey and add it to col
                 // 2.create a FKey and add it to col.
                 // The order here is important.
                 PKey pkey = this.getPKey(handle);
-                if (pkey != null) {
-                    col.setKey(pkey);
-                }
+                if (pkey != null) { col.setKey(pkey); }
                 FKey fkey = this.getFKey(handle);
-                if (fkey != null) {
-                    col.setKey(fkey);
-                }
+                if (fkey != null) { col.setKey(fkey); }
             }
         }
         return col;
@@ -1743,8 +1660,7 @@ public class ArgoDBModelFacade extends DBModelFacade {
             String relatedSchemaName = null;
             String relatedTableName = null;
             String relatedColumnName = null;
-            String relatedKeyName = null;
-            
+            String relatedKeyName = null; 
             // get native data from the corresponding association end, 
             // association and related table.
             Object assoEnd = this.getAssociationEnd(table, attrName);
@@ -1762,9 +1678,7 @@ public class ArgoDBModelFacade extends DBModelFacade {
                     LOG.info(e.getMessage());
                 }
             }
-            
             key = new FKey(schemaName, tableName, attrName, seq, keyName);
-            
             // get the related table
             Table relatedTable = this.getAssociatedTable(table, attrName);
             if (relatedTable != null) {
@@ -1776,8 +1690,7 @@ public class ArgoDBModelFacade extends DBModelFacade {
                     // related schemaName
                     relatedSchemaName = Model.getFacade().getName(
                         relSchemaModel);
-                }
-                
+                } 
                 if (assoEnd != null) {
                     Column col = relatedTable.getColumn(
                         Model.getFacade().getName(assoEnd));
@@ -1803,13 +1716,10 @@ public class ArgoDBModelFacade extends DBModelFacade {
     /** Return an "associated Table" by finding Table related by the given
      * asociation name.  When creating the associated Table use getTableNoAssoc 
      * as we don't want to follow FKeys in reference loops.
-     *
      * @param Object tableModel
      * @param String assoName
      */
-
     private Table getAssociatedTable(Object tableModel, String assoName) {
-
         Collection col = Model.getFacade().getAssociatedClasses(tableModel);
         //the collection may include the given class also.
         //Should it be excluded?
@@ -1834,32 +1744,21 @@ public class ArgoDBModelFacade extends DBModelFacade {
      */
     public DBElement getDBElement(Object handle) {
         DBElement dbe = getTable(handle);  // optimize for table
-        if (dbe != null) {
-            return dbe;
-        }
+        if (dbe != null) { return dbe; }
         
         dbe = getColumnPartially(handle, true);
-        if (dbe != null) {
-            return dbe;
-        }
+        if (dbe != null) { return dbe; }
         
         dbe = getView(handle);
-        if (dbe != null) {
-            return dbe;
-        }
+        if (dbe != null) { return dbe; }
         
         dbe = getSchema(handle);
-        if (dbe != null) {
-            return dbe;
-        }
-        
+        if (dbe != null) { return dbe; }
+
         dbe = getRegistry(handle);
-        if (dbe != null) {
-            return dbe;
-        }
+        if (dbe != null) { return dbe; }
         
-        dbe = getDatabase(handle);
-        
+        dbe = getDatabase(handle);        
         return dbe;
         
     }
@@ -1877,12 +1776,10 @@ public class ArgoDBModelFacade extends DBModelFacade {
         //  the stereotype an owned element of the modelelement.
         //
         Object newStereo = null;
-        if (sStereo != null && sStereo != "") {
-            
+        if (sStereo != null && sStereo != "") {      
             Object myNS = Model.getFacade().isANamespace(obj)
                 ? obj
                 : ProjectManager.getManager().getCurrentProject().getModel();
-
             newStereo 
                 = Model.getExtensionMechanismsFactory().buildStereotype(
                     obj, sStereo, myNS);
@@ -1895,8 +1792,7 @@ public class ArgoDBModelFacade extends DBModelFacade {
      * @param properties Map
      * @param obj Model element
      */
-    protected void setTags(Map properties, Object obj) {
-        
+    protected void setTags(Map properties, Object obj) {     
         Vector collTags = new Vector();
         Iterator it = properties.keySet().iterator();
         while (it.hasNext()) {
@@ -1909,10 +1805,8 @@ public class ArgoDBModelFacade extends DBModelFacade {
         Model.getCoreHelper().setTaggedValues(obj, collTags);
     }
     
-    
     /**
      * Gets a model object's tag values making a Properties list
-     * 
      * @param obj The model object.
      * @return The <code>Properties</code> of the tags.
      */
@@ -1927,18 +1821,13 @@ public class ArgoDBModelFacade extends DBModelFacade {
         return properties;
     }
     
-    /** The name of a model element
-     *
+    /** Gets the name of a model element.
      * @param handle that points out the object.
      * @return the name
      */
     public String getModelElementName(Object handle) {
         String sValue = (String) Model.getFacade().getName(handle);
-        if (sValue == null) {
-            return "";
-        } else {
-            return sValue;
-        }
+        return (sValue == null ? "" : sValue);
     }
     
     /**
@@ -1966,15 +1855,12 @@ public class ArgoDBModelFacade extends DBModelFacade {
         Project p = ProjectManager.getManager().getCurrentProject();
         for (int i = 0; i < sTypes.length; i++) {
             Object mType = (Object) p.findType(sTypes[i], false);
-            if (mType == null) {
-                return false;
-            }
+            if (mType == null) {  return false; }
         }
         return true;
     }
     
     /** Recognizer for model elements representing Schemas
-     *
      * @param handle candidate
      * @return true if model element represents Schemas
      */
@@ -2014,7 +1900,6 @@ public class ArgoDBModelFacade extends DBModelFacade {
     /**
      * Find a package in the model. If it does not exist, a new
      * package is created.
-     *
      * @param name The name of the package.
      * @return The package found or created.
      */
