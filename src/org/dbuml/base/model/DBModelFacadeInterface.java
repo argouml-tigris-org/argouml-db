@@ -13,9 +13,6 @@ import org.dbuml.base.factory.Factory;
  * @author jgunderson
  */
 public interface DBModelFacadeInterface {
-//    public static Object _tableStereotype = null;
-//    public static Object _schemaStereotype = null;
-//    public static Object _componentStereotype = null;
     
     /**
      * Get the "Parent" element that "owns" this element. A Database model does
