@@ -48,7 +48,7 @@ the generation of SQL statements and generation of UML models from database cata
     <property name="name" value="argomodule-${argo.module.name}"/>
 
     <property name="module.root" value="${basedir}"/>
-    <property name="module.src.dir" value="${argo.root.dir}/src_new"/>
+    <property name="module.src.dir" value="${module.root}/src"/>
     <property name="module.tests.src" value="${module.root}/tests"/>
 
     <property name="module.lib.dir" value="${module.root}/lib"/>
@@ -56,7 +56,7 @@ the generation of SQL statements and generation of UML models from database cata
     <property name="manifest" value="manifest.mf"/>
     <property name="manifest.src" value="${module.src.dir}/org/dbuml/${manifest}"/>
 
-    <property name="module.build.dir" value="${argo.root.dir}/build"/>
+    <property name="module.build.dir" value="${module.root}/build"/>
     <property name="module.build.dest" value="${module.build.dir}/classes"/>
     <property name="module.tests.build" value="${module.build.dir}/tests"/>
     <property name="module.tests.classes" value="${module.tests.build}/classes"/>
