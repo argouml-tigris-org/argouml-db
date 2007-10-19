@@ -298,6 +298,22 @@ public class GenericDBMetadata extends DBMetadata {
             for (int i = 0; i < cols.length; i++) {
                 if (cols[i].getName().equalsIgnoreCase(colName)) {
                     cols[i].setKey(key);
+                    // set multiplicity end for foreign key.
+                    if (cols[i].isForeignKey()) {
+                        if (cols[i].isUnique()) { // no more than 1.
+                            if (cols[i].allowsNulls()) {// 0-1
+                                ((FKey)key).setTargetMultiplicityAtMostOne();
+                            } else {// 1
+                                ((FKey)key).setTargetMultiplicityExactlyOne();
+                            }
+                        } else { // n
+                            if (cols[i].allowsNulls()) { //0-n
+                                ((FKey)key).setTargetMultiplicityZeroOrMore();
+                            } else { // 1-n
+                                ((FKey)key).setTargetMultiplicityAtLeastOne();
+                            }
+                        }
+                    }
                     break;
                 }
             }
