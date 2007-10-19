@@ -110,7 +110,7 @@ public class DBModule implements ModuleInterface {
         this.initializeFactories();
         
         //create default dbuml diagrams
-        createDefaultDiagrams();
+//        createDefaultDiagrams();
         
         LOG.info("*** DBUML module initialized");
         _initialized = true;
