@@ -995,8 +995,19 @@ public class ArgoDBModelFacade extends DBModelFacade {
                 ProjectManager.getManager().getCurrentProject().getModel();
         Object mAttr =
                 Model.getCoreFactory().buildAttribute(tableModel, model, mType);
+        setVisibilityDefault(mAttr);
         column.setModelElement(mAttr);
         this.updateDBElement(column);
+    }
+    
+    /**
+     * Sets the visibility of this model to default or package.
+     *@param The object model.
+     */
+    protected void setVisibilityDefault(Object model) {
+        Model.getCoreHelper().setVisibility(
+                    model,
+                    Model.getVisibilityKind().getPackage());         
     }
     
     /**
@@ -1361,6 +1372,7 @@ public class ArgoDBModelFacade extends DBModelFacade {
             }
         }
         Model.getCoreHelper().setType(column.getModelElement(), mType);
+        setVisibilityDefault(column.getModelElement());
         updateDBElement(column);
     }
        
