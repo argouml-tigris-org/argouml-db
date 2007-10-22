@@ -87,54 +87,60 @@ public class View extends Table {
     }
     
     /**
-     * Gets the base tables specified in the query statement.
+     * Gets the base tables specified in the query statement. It parses
+     * and extracts the base table names from simple query of teh form :</p>
+     * 
+     * SELECT [ qualifier ] select_list FROM table_list [ WHERE clause ] 
+     * [ GROUP BY ... HAVING clause ]
+     *
      * @return An array of base table names.
      */
     public String[] getBaseTablesFromQuery() {
         
-//        // Parse the following:
-//        // select:
-//        //SELECT [ qualifier ] select_list
-//        //FROM table_list
-//        //[ WHERE clause ]
-//        //[ GROUP BY ... HAVING clause ]
-//        
-//        String query = getQueryString();
-//        String sqlUp = query.toUpperCase();
-//        int iSelect = sqlUp.indexOf("SELECT");
-//        int iFrom = sqlUp.indexOf("FROM");
-//        int iWhere = sqlUp.indexOf("WHERE");
-//        
-//        String[] tables = null;
-//        
-//        if (iSelect >= 0 && iFrom > 0) {
-//            String tableList = null;
-//            if (iWhere > 0) {
-//                tableList = query.substring(iFrom + 4, iWhere).trim();
-//            } else {
-//                tableList = query.substring(iFrom + 4).trim();
-//            }
-//            
-//            if (tableList != null) {
-//                tables = tableList.split(",");
-//                for (int i = 0; i < tables.length; i++) {
-//                    tables[i] = tables[i].trim();
-//                    int indexOfBlank = tables[i].indexOf(' ');
-//                    if (indexOfBlank > 0 ) {
-//                        //product prod
-//                        // the table name is on the left of the blank.
-//                        tables[i] = tables[i].substring(0, indexOfBlank);
-//                    }
-//                }
-//            }
-//            
-//        } else {
-//            LOG.info("Invalid view SQL statement:)" + query);
-//        }
-//        
-//        return ((tables != null) ? tables : new String[] {});
-        LOG.info("TO DO- Parse and get view base table names from the query:"  + this.getQueryString());
-        return new String[] {};
+        // Note:
+        
+        // Parse the following:
+        // select:
+        //SELECT [ qualifier ] select_list
+        //FROM table_list
+        //[ WHERE clause ]
+        //[ GROUP BY ... HAVING clause ]
+        
+        String query = getQueryString();
+        String sqlUp = query.toUpperCase();
+        int iSelect = sqlUp.indexOf("SELECT");
+        int iFrom = sqlUp.indexOf("FROM");
+        int iWhere = sqlUp.indexOf("WHERE");
+        
+        String[] tables = null;
+        
+        if (iSelect >= 0 && iFrom > 0) {
+            String tableList = null;
+            if (iWhere > 0) {
+                tableList = query.substring(iFrom + 4, iWhere).trim();
+            } else {
+                tableList = query.substring(iFrom + 4).trim();
+            }
+            
+            if (tableList != null) {
+                tables = tableList.split(",");
+                for (int i = 0; i < tables.length; i++) {
+                    tables[i] = tables[i].trim();
+                    int indexOfBlank = tables[i].indexOf(' ');
+                    if (indexOfBlank > 0 ) {
+                        //product prod
+                        // the table name is on the left of the blank.
+                        tables[i] = tables[i].substring(0, indexOfBlank);
+                    }
+                }
+            }
+            
+        } else {
+            LOG.info("Invalid view SQL statement:)" + query);
+        }
+        
+        return ((tables != null) ? tables : new String[] {});
+
     }
     
     
