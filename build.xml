@@ -242,8 +242,6 @@ the generation of SQL statements and generation of UML models from database cata
     
     <mkdir dir="${module.release-bundle.dest}"/>
     
-    <copy todir="${module.release-bundle.dest}"
-      file="${module.root}/dbuml.bat"/>
     <copy tofile="${module.release-bundle.dest}/antlrall.jar"
       file="${argo.root.dir}/lib/antlrall-2.7.2.jar"/>
     <copy tofile="${module.release-bundle.dest}/commons-logging.jar"
@@ -320,6 +318,9 @@ the generation of SQL statements and generation of UML models from database cata
   <!-- =================================================================== -->
   <target name="copy-common-dirs" 
           description="Copy common release directories">
+
+    <copy todir="${release.dest}"
+      file="${module.root}/dbuml.bat"/>
     
     <copy todir="${release.dest}"
       file="${module.root}/DB-UML.LICENSE.txt"/>
