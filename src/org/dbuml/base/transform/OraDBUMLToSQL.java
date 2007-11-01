@@ -7,11 +7,11 @@ package org.dbuml.base.transform;
 
 /** Class for transforming DBUML classes into SQL statements for oracle.
  *
- * @author  rgupta
+ * @author  jgrengbondai
  */
 public class OraDBUMLToSQL extends GenericDBUMLToSQL {
     private static final String TEMPLATES_DIR = 
-            "org/dbuml/base/transform/templates/oracle";
+            "org/dbuml/base/transform/templates/oracle/";
     
     /** Creates a new instance of OraDBUMLToSQL */
     public OraDBUMLToSQL() {
@@ -31,9 +31,5 @@ public class OraDBUMLToSQL extends GenericDBUMLToSQL {
     protected String getTemplatePathCreateSchema() {
         return TEMPLATES_DIR + "OraCreateSchema.vm";     
     }
-    
-    
-    
-    
     
 }
