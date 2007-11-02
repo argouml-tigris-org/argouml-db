@@ -163,7 +163,9 @@ public class CreateActions {
         FKey fkey = new FKey(sourceSchemaName, sourceTable.getName(),
                 fkColumn.getName(), (short) 1, "new_fk_constraint");
         fkey.setNativeData(targetSchemaName, targetTable.getName(),
-                pkColumn.getName(), "new_pk_constratin");
+                pkColumn.getName(), "new_pk_constraint");
+        fkey.setUpdateRule("");
+        fkey.setDeleteRule("");
         fkColumn.setKey(fkey);
         DBModelFacade.getInstance().addColumn(fkColumn, source);
         

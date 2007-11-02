@@ -9,7 +9,6 @@ package org.dbuml.base.model;
  * Class for modeling foreign key relationship.
  * @author jgrengbondai
  */
-//public class FKey extends PKey {
 public class FKey extends DBAssociation implements PKeyInterface {
     private String nativeSchema;
     private String nativeTableName;
@@ -20,8 +19,6 @@ public class FKey extends DBAssociation implements PKeyInterface {
     private String tableName;
     private String columnName;
     private Column column;
-    
-    
     
     /**
      * Creates a new FKey.
@@ -166,7 +163,8 @@ public class FKey extends DBAssociation implements PKeyInterface {
      */
     public short getKeySequence() {
         String s = this.getProperty("KEY_SEQ");
-        return s == null ? 0 : (new Short(s)).shortValue();
+//        return s == null ? 0 : (new Short(s)).shortValue();
+        return s == null ? 1 : (new Short(s)).shortValue();
     }
     
     /**
@@ -243,6 +241,55 @@ public class FKey extends DBAssociation implements PKeyInterface {
         // it stereotype string which is mostly "PK" or sometimes "PFK".
         
         //Should we simply remove this?
+    }
+    
+    /**Sets UPDATE_RULE value.
+     * @param value <code>String</code> indicating what happens to the foreign
+     * key when the primary key is updated. The possible values are:
+     * CASCADE, SET NULL, SET DEFAULT, RESTRICT, and NO ACTION.
+     */
+    public void setUpdateRule(String value) {
+        //TO DO: validate value
+        this.setProperty("UPDATE_RULE", value);
+    }
+    /** Gets the update rule string.
+     * @return The update rule string.
+     */
+    public String getUpdateRule() {
+        return this.getProperty("UPDATE_RULE");
+    }
+    
+    /**Determines whether there is update rule defined for this foreign key.
+     * @return <code>true</code> or <code>false</code>.
+     */
+    public boolean hasUpdateRule() {
+        String rule = getUpdateRule();
+        return (rule != null && rule != "");
+    }
+    
+    /**Sets DELETE_RULE value.
+     * @param value <code>String</code> indicating what happens to the foreign
+     * key when the primary key is deleted. The possible values are:
+     * CASCADE, SET NULL, SET DEFAULT, RESTRICT, and NO ACTION.
+     */
+    public void setDeleteRule(String value) {
+        //TO DO: validate value
+        this.setProperty("DELETE_RULE", value);
+    }
+    
+    /**Determines whether there is a delete rule defined for this foreign key.
+     * @return <code>true</code> or <code>false</code>.
+     */
+    public boolean hasDeleteRule() {
+        String rule = getDeleteRule();
+        return (rule != null && rule != "");
+    }
+    
+    /** Gets the delete rule string.
+     * @return The delete rule string.
+     */
+    public String getDeleteRule() {
+        return this.getProperty("DELETE_RULE");
     }
     
 }

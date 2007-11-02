@@ -345,9 +345,36 @@ public class GenericDBMetadata extends DBMetadata {
                 String nativeName = rs.getString("PK_NAME");
                 key.setNativeData(nativeSchema, nativeTable, 
                         nativeCol, nativeName);
+                key.setUpdateRule(
+                        getReferentialAction(rs.getShort("UPDATE_RULE")));
+                key.setDeleteRule(
+                        getReferentialAction(rs.getShort("DELETE_RULE")));
                 this.setKey(cols, colName, key);
             }
         }
+    }
+    
+    private String getReferentialAction(short action) {
+        String sAction = null;
+        switch (action) {
+            case DatabaseMetaData.importedKeyCascade:
+                sAction = "CASCADE"; 
+                break;  
+            case DatabaseMetaData.importedKeySetNull:
+                sAction = "SET NULL"; 
+                break;
+            case DatabaseMetaData.importedKeySetDefault:
+                sAction = "SET DEFAULT"; 
+                break;
+            case DatabaseMetaData.importedKeyRestrict:
+                sAction = "RESTRICT"; 
+                break;
+            case DatabaseMetaData.importedKeyNoAction:
+                sAction = "NO ACTION"; 
+                break;
+            default:
+        }
+        return sAction;
     }
     
     /**

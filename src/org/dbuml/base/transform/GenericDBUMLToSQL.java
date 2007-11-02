@@ -445,13 +445,8 @@ public class GenericDBUMLToSQL extends DBUMLToSQL {
                 if (fkconstraint == null) {
                     fkconstraint = new FKConstraint(fname);
                     hashFKs.put(fname, fkconstraint);
-                }
-                fkconstraint.setPkTableSchema(fkey.getNativeSchema());
-                fkconstraint.setPkTableName (fkey.getNativeTableName());
-                fkconstraint.getFkColumnNames().add(fkey.getKeySequence() - 1,
-                        fkey.getColumnName());
-                fkconstraint.getPkColumnNames().add(fkey.getKeySequence() - 1,
-                        fkey.getNativeColumnName());
+                }     
+                fkconstraint.setInfo(fkey);
             }
         }
         return new Vector(hashFKs.values());
@@ -468,11 +463,11 @@ public class GenericDBUMLToSQL extends DBUMLToSQL {
         Column columns[] = table.getColumns();
         for (int i = 0; i < columns.length; i++) {
             if (columns[i].isPrimaryKey()) {
+                PKeyInterface pkey = columns[i].getKey();
                 if (pkconstraint == null) {
                     pkconstraint = new PKConstraint();
+                    pkconstraint.setPkName(pkey.getKeyName());
                 }
-                PKeyInterface pkey = columns[i].getKey();
-                pkconstraint.setPkName(pkey.getKeyName());
                 pkconstraint.getPkColumnNames().add(pkey.getKeySequence() - 1,
                         pkey.getColumnName());
             }

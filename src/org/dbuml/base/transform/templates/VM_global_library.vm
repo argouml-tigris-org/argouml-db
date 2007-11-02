@@ -10,3 +10,38 @@
     $col.getFixedName() $col.getTypeName()#if ($colSize > 0)($colSize#if ($colScale > 0),$colScale#end)#end#if ($colDefault !="") DEFAULT '$colDefault'#end#if (!($col.allowsNulls())) NOT NULL#end
 #end
 #######################################################################################
+
+#######################################################################################
+## Define primary keys macro
+#######################################################################################
+#macro( PrimaryDef $pkeys $toContinue)
+#set($colnum = $pkeys.getPkColumnNames().size())
+#if ($colnum > 0)
+    CONSTRAINT $!pkeys.getPkName() PRIMARY KEY (#foreach ($nextColumn in $pkeys.getPkColumnNames())$nextColumn#if ($velocityCount < $colnum ),#end
+#end)#if ($toContinue), #end
+
+#end
+#end
+#######################################################################################
+
+
+#######################################################################################
+## Define foreign keys macro
+#######################################################################################
+#macro( ForeignDef $FKConstraintVector)
+#set($fkConstriantCount = $FKConstraintVector.size())
+#if ($fkConstriantCount > 0)
+#foreach ($FKConstraint in $FKConstraintVector)
+#set($fkey = $FKConstraint.getFKey())
+#set($sch = $fkey.getNativeSchema()) 
+    CONSTRAINT $!FKConstraint.getFkName() FOREIGN KEY ($fkey.getColumnName()) REFERENCES #if ($sch != "")$sch.#end$fkey.getNativeTableName()($fkey.getNativeColumnName())
+#if ($fkey.hasUpdateRule())       ON UPDATE $fkey.getUpdateRule()#end 
+#if ($fkey.hasDeleteRule()) ON DELETE $fkey.getDeleteRule()#end 
+#if ($velocityCount < $fkConstriantCount),#end
+ 
+#end
+#end
+#end
+#######################################################################################
+
+

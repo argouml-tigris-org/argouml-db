@@ -1679,6 +1679,8 @@ public class ArgoDBModelFacade extends DBModelFacade {
             Object asso = null;
             short seq = 1;
             String keyName = null;
+            String updateRule = null;
+            String deleteRule = null;
             if (assoEnd != null) {
                 relatedColumnName = Model.getFacade().getName(assoEnd);
                 asso = Model.getFacade().getAssociation(assoEnd);
@@ -1689,8 +1691,12 @@ public class ArgoDBModelFacade extends DBModelFacade {
                 } catch (NumberFormatException e) {
                     LOG.info(e.getMessage());
                 }
+                updateRule = prop.getProperty("UPDATE_RULE");
+                deleteRule = prop.getProperty("DELETE_RULE");
             }
             key = new FKey(schemaName, tableName, attrName, seq, keyName);
+            key.setUpdateRule(updateRule);
+            key.setDeleteRule(deleteRule);
             // get the related table
             Table relatedTable = this.getAssociatedTable(table, attrName);
             if (relatedTable != null) {

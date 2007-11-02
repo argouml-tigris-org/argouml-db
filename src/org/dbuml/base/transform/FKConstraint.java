@@ -6,6 +6,7 @@
 package org.dbuml.base.transform;
 
 import java.util.Vector;
+import org.dbuml.base.model.FKey;
 
 /**
  * Helper class for generating foreign key statement in velocity.
@@ -14,10 +15,15 @@ import java.util.Vector;
 
 public class FKConstraint {
     private String fkName;
+    
+    // TO DO: Remove the following and use fkey
     private String pkTableSchema;
     private String pkTableName;
     private Vector pkColumnNames = new Vector(256);
     private Vector fkColumnNames = new Vector(256);
+   
+    
+    private FKey fkey;
     private String updateRule;
     private String deleteRule;
     
@@ -66,6 +72,7 @@ public class FKConstraint {
      */
     public String getPkTableName() { return pkTableName; }
     
+    
     /**
      * Sets the table name in which the pimary key is defined.
      * @param tableName The table name.
@@ -78,11 +85,35 @@ public class FKConstraint {
      * @return A Vector of names.
      */
     public Vector getPkColumnNames() { return pkColumnNames; }
+    
     /**
      * Gets the names of the foreign key columns.
      * @return The foreign key names.
      */
     public Vector getFkColumnNames() { return fkColumnNames; }
+    
+    /** Sets foreign key information.
+     * @param key An instance of <code>FKey</code>.
+     */
+    public void setInfo(FKey key) {
+        setPkTableSchema(key.getNativeSchema());
+        setPkTableName (key.getNativeTableName());
+
+        this.fkColumnNames.add(key.getKeySequence() - 1, key.getColumnName());
+        this.pkColumnNames.add(key.getKeySequence() - 1,
+                key.getNativeColumnName());
+        
+        // TO DO: Remove the above lines and try using the information
+        // in fkey within the velocity templates.
+        
+        this.fkey = key;
+    }
+    
+    /** Gets the FKey for t
+     */
+    public FKey getFKey() {
+        return this.fkey;
+    }
     /**
      * Gets the update rule.
      * @return The update rule string.
