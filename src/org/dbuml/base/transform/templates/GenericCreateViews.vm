@@ -1,3 +1,9 @@
+##**********************************************
+## *   Copyright (C) 2007 CINCOM SYSTEMS, INC.
+## *   All Rights Reserved
+## **********************************************
+##
+##
 ## SQL 92 source template
 ##############################################################################
 ##       Create View
@@ -5,14 +11,18 @@
 #if ($View)
 #set($queryStr = $View.getQueryString())
 #if ($queryStr != "") 
-/* Create View $Namespace.$View.getFixedName() */   
-##create view $View.getFixedName()		
-CREATE VIEW $Namespace.$View.getFixedName()	
+   		
+CREATE VIEW #if ($Namespace != "")$Namespace.#end$View.getFixedName()	
 #set($colnum = $View.getColumnsVector().size())
 #if ($colnum > 0)
-(#foreach ($nextColumn in $View.getColumnsVector())$nextColumn.getFixedName()#if ($velocityCount < $colnum),#end #end)
+(
+#foreach ($nextColumn in $View.getColumnsVector())
+     $nextColumn.getFixedName()#if ($velocityCount < $colnum),#end
+
 #end
-as
+)
+#end 
+AS 
 $queryStr
 #end
 #end

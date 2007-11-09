@@ -664,27 +664,15 @@ public class GenericActions implements ActionsInterface {
             uTrans.commit();
         }
     }
-    //modified by sbalda on dec 2 2005
+   
     /**
      * Generates SQL statements for the specified object model.
      * @param selectedItem The object model.
-     * @param fileName The file name to write the SQL statement into.
+     * @param file The file to write the SQL statement into.
      */
-    public void generateSource(Object selectedItem, File fileName) {
-        FileOutput fo = new FileOutput("Generate Source", fileName);
-        //modified the sequence of SQL, Sbalda December 14 2005.
-        String sSQL = generateSQLDeep(selectedItem, "dropSQLViews");
-        sSQL = sSQL + generateSQLDeep(selectedItem, "dropSQLTables");
-        sSQL = sSQL + generateSQLDeep(selectedItem, "dropSQLSchema");
-        sSQL = sSQL + generateSQLDeep(selectedItem, "createSQLSchema");
-        sSQL = sSQL + generateSQLDeep(selectedItem, "createSQLTables");
-        sSQL = sSQL + generateSQLDeep(selectedItem, "createSQLViews");
-        sSQL = sSQL + generateSQLDeep(selectedItem,
-                "createAlterConstraintsSQL");
-        sSQL = sSQL + generateSQLDeep(selectedItem,
-                "createAlterFKConstraintsSQL");
-        
-//        System.out.println(sSQL);
+    public void generateSource(Object selectedItem, File file) {
+        FileOutput fo = new FileOutput("Generate Source", file);
+        String sSQL = this.generateSource(selectedItem, true, true);
         try {
             // save the Source Generated to a File.
             fo.saveData(sSQL);
@@ -699,6 +687,39 @@ public class GenericActions implements ActionsInterface {
                         "GENERATE_SOURCE_PROBLEM"),
                     JOptionPane.ERROR_MESSAGE);
         }
+    }
+    
+    /**
+     * Generates complete SQL statements for the specified object model.
+     * @param selectedItem The object model.
+     * @param includeDrop boolean flag for whether or not to include drop
+     * statements the generated SQL.
+     * @param includeAlter boolean flag for whether or not to include alter 
+     * statements the generated SQL.
+     * @return The SQL string.
+     */
+    public String generateSource(Object selectedItem,
+                                 boolean includeDrop,
+                                 boolean includeAlters) {
+        StringBuffer buf = new StringBuffer(256);
+        if (includeDrop) {
+            if (DBModelFacade.getInstance().representsASchema(selectedItem) && 
+                !DBModelFacade.getInstance().isDefaultSchema(selectedItem)) {
+                    buf.append(generateSQLDeep(selectedItem, "dropSQLSchema"));     
+            } else {
+                buf.append(generateSQLDeep(selectedItem, "dropSQLViews"));
+                buf.append(generateSQLDeep(selectedItem, "dropSQLTables"));
+            }
+        }
+        buf.append(generateSQLDeep(selectedItem, "createSQLSchema"));
+        buf.append(generateSQLDeep(selectedItem, "createSQLTables"));
+        buf.append(generateSQLDeep(selectedItem, "createSQLViews"));
+        if (includeAlters) {
+            buf.append(generateSQLDeep(selectedItem, "createAlterConstraintsSQL"));
+            buf.append(generateSQLDeep(selectedItem, 
+                    "createAlterFKConstraintsSQL"));
+        }
+        return buf.toString();
     }
     
     

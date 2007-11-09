@@ -79,16 +79,17 @@ public class GeneratorSQL implements CodeGenerator {
     }
     
     /*
-     *  generateSQL is called directly by DBUML in GenericActions.generateSQL
-     *  and is used by the methods below implementing the CodeGenerator
+     *  generateSource is called directly by DBUML in 
+     * GenericActions.generateSource
+     * and is used by the methods below implementing the CodeGenerator
      interface
      */
-    private String generateSQL(Object obj, String type) {
+    private String generateSource(Object obj) {
         Factory fac = DBModelFacade.getInstance().getMyFactory(obj);
         String retVal = null;
         if (fac != null) {
             ActionsInterface actionsinterface = fac.getActionsInterface();
-            retVal = actionsinterface.generateSQL(obj, type);
+            retVal = actionsinterface.generateSource(obj, false, true);
         } else {
             retVal = Translator.getInstance().localize("GENSQL_FAILURE_TITLE") 
                     + Translator.getInstance().localize("DB_FACTORY_NOTFOUND");
@@ -155,14 +156,7 @@ public class GeneratorSQL implements CodeGenerator {
            
         String pathname = createDirectoriesPathname(o, path);
         
-        String fileContent = null;
-        if (DBModelFacade.getInstance().representsATable(o)) {
-            fileContent = generateSQL(o, "createSQLTables");
-        } else if (DBModelFacade.getInstance().representsAView(o)) {
-            fileContent = generateSQL(o, "createSQLViews");
-        } else if (DBModelFacade.getInstance().representsASchema(o)) {
-            fileContent = generateSQL(o, "createSQLSchema");
-        }
+        String fileContent = generateSource(o); 
         
         if (fileContent.length() != 0) {
             BufferedWriter fos = null;
@@ -258,18 +252,11 @@ public class GeneratorSQL implements CodeGenerator {
     public Collection generate(Collection elements, boolean deps) {
         List ret = new ArrayList();
         for (Iterator it = elements.iterator(); it.hasNext(); ) {
-            String content = null;
+            
             Object elem = it.next();
             String path = generatePath(elem);
             String name = Model.getFacade().getName(elem) + "sql";
-            //bug: must use correct string based on element type
-            if (DBModelFacade.getInstance().representsATable(elem)) {
-                content = generateSQL(elem, "createSQLTables");
-            } else if (DBModelFacade.getInstance().representsAView(elem)) {
-                content = generateSQL(elem, "createSQLViews");
-            } else if (DBModelFacade.getInstance().representsASchema(elem)) {
-                content = generateSQL(elem, "createSQLSchema");
-            }
+            String content = generateSource(elem); 
             SourceUnit su = new SourceUnit(name, path, content);
             ret.add(su);
         }

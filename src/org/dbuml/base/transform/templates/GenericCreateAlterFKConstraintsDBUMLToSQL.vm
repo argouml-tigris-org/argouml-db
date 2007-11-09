@@ -1,64 +1,22 @@
+##**********************************************
+## *   Copyright (C) 2007 CINCOM SYSTEMS, INC.
+## *   All Rights Reserved
+## **********************************************
+##
+##
 ## SQL 92 source template
 ##
 ##      Generate Alters for Foreign Keys
 ##
 #if ($FKCons.size() > 0)
-##if ($FKCons.size())		
-#* This line is modified  
-   Date		4 May 2005.
-   By		Sbalda
-   purpose:	The FKCons Object is null so cannot be used with comparision operator.
-   Similar change is made at line no 67.
-*#
-## Major changes were made on 11/22 by suresh to address issue #45.
-## put #foreach ($FKConstraint in $FKCons) here 11/22 sbalda....
-#if ($Namespace != "")
 #foreach ($FKConstraint in $FKCons)
-/* ALTER TABLE $Namespace.$Table.getFixedName()    */
-ALTER TABLE $Namespace.$Table.getFixedName()
-ADD CONSTRAINT $!FKConstraint.getFkName() foreign key
-    (
-#set($colnum = $FKConstraint.getFkColumnNames().size())
-#foreach ($nextColumn in $FKConstraint.getFkColumnNames()) 
-	$nextColumn #if ($velocityCount < $colnum),
-#end
-#end
 
-    )
-    references $Namespace.$FKConstraint.getPkTableName()
-    ( 
-#set($colnum = $FKConstraint.getPkColumnNames().size())
-#foreach ($nextColumn in $FKConstraint.getPkColumnNames()) 
-     $nextColumn #if ($velocityCount < $colnum),
-#end
-#end
-
-    )
+ALTER TABLE #if ($Namespace != "")$Namespace.#end$Table.getFixedName()
+#set($fkey = $FKConstraint.getFKey())
+#set($sch = $fkey.getNativeSchema())
+ADD CONSTRAINT $!FKConstraint.getFkName() FOREIGN KEY ($fkey.getColumnName())
+    REFERENCES #if ($sch != "")$sch.#end$fkey.getNativeTableName()($fkey.getNativeColumnName())#if ($fkey.hasUpdateRule()) ON UPDATE $fkey.getUpdateRule()#end 
+#if ($fkey.hasDeleteRule()) ON DELETE $fkey.getDeleteRule()#end
 ;
-#end
-#else
-#foreach ($FKConstraint in $FKCons)
-/* ALTER TABLE $Table.getFixedName()    */
-ALTER TABLE $Table.getFixedName()
-ADD CONSTRAINT $!FKConstraint.getFkName() foreign key
-    (
-#set($colnum = $FKConstraint.getFkColumnNames().size())
-#foreach ($nextColumn in $FKConstraint.getFkColumnNames())
-        $nextColumn #if ($velocityCount < $colnum),
-#end
-#end
-
-    )
-    references $Namespace.$FKConstraint.getPkTableName()
-    (
-#set($colnum = $FKConstraint.getPkColumnNames().size())
-#foreach ($nextColumn in $FKConstraint.getPkColumnNames())
-        $nextColumn #if ($velocityCount < $colnum),
-#end
-#end
-
-    )
-;
-#end
 #end
 #end

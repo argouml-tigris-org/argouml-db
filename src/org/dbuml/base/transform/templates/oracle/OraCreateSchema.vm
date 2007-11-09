@@ -1,4 +1,11 @@
-## SQL 92 source template
+##**********************************************
+## *   Copyright (C) 2007 CINCOM SYSTEMS, INC.
+## *   All Rights Reserved
+## **********************************************
+##
+##
+## Oracle source template
+##
 ###########################################################################
 ##
 ##      Create Schema 
@@ -6,13 +13,8 @@
 #if ($Schema)
 ## Schema $Schema.getName()   
 #if ($Namespace != "")
-/* Create Schema $Schema.getFixedName()    */
-##create schema $Schema.getFixedName() authorization $Schema.getFixedName();
-##sure uve added 3 following lines here for oracle.
-create user $Schema.getFixedName() identified by $Schema.getFixedName();
-grant all privileges to $Schema.getFixedName();
-## added this line sure 29/12
-#else
-/* Owning database does not support Schemas or the namespace is the default Schema */
+
+CREATE USER $Schema.getFixedName() IDENTIFIED BY $Schema.getFixedName();
+GRANT ALL PRIVILEGES TO $Schema.getFixedName();
 #end
 #end

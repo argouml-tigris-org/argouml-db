@@ -1,15 +1,15 @@
+##**********************************************
+## *   Copyright (C) 2007 CINCOM SYSTEMS, INC.
+## *   All Rights Reserved
+## **********************************************
+##
+##
 ## SQL 92 source template
+##
 #if ($Table)
 #set($colnum = $Table.getColumnsVector().size())
 #if ($colnum >0)
-#if ($Namespace != "")
-## code for Schema added/ modified by sbalda on 11/14
-/* Drop Table $Namespace.$Table.getFixedName()    */	
-DROP TABLE $Namespace.$Table.getFixedName() cascade;
-#else
-## Added by Rashmi Gupta to avoid the dropping of silently imported tables 
-/* Drop Table $Table.getFixedName()    */	
-DROP TABLE $Table.getFixedName(); 
-#end
+
+DROP TABLE #if ($Namespace != "")$Namespace.#end$Table.getFixedName() CASCADE; 
 #end
 #end

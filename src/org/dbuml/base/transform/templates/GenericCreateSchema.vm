@@ -1,8 +1,15 @@
+##**********************************************
+## *   Copyright (C) 2007 CINCOM SYSTEMS, INC.
+## *   All Rights Reserved
+## **********************************************
+##
+##
 ## SQL 92 source template
-#if ($Schema)
-## Schema $Schema.getName()   
+##
+##--------------------------------------------------
+#if ($Schema)  
 #if ($Namespace != "")
-/* Create SCHEMA $Schema.getFixedName()    */
+
 CREATE SCHEMA $Schema.getFixedName();
 #else
 /* Owning database does not support Schemas or the namespace is the default Schema */

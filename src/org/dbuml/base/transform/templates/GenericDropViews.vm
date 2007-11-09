@@ -1,10 +1,11 @@
+##**********************************************
+## *   Copyright (C) 2007 CINCOM SYSTEMS, INC.
+## *   All Rights Reserved
+## **********************************************
+##
+##
 ## SQL 92 source template
 #if ($View)
-#if ($Namespace !="")
-/* Drop View  $Namespace.$View.getFixedName() */
-DROP VIEW $Namespace.$View.getFixedName();	
-#else
-/* Drop View  $View.getFixedName() */
-DROP VIEW $View.getFixedName();
-#end
+
+DROP VIEW #if ($Namespace != "")$Namespace.#end$View.getFixedName(); 
 #end

@@ -1,17 +1,17 @@
+##**********************************************
+## *   Copyright (C) 2007 CINCOM SYSTEMS, INC.
+## *   All Rights Reserved
+## **********************************************
+##
 ##
 ##      Generate Alters for Primary Keys
 ##
 #if ($PKCon)
-#if ($Namespace != "")
-## code added/modified for Namespace / Schema by sbalda on 11/14
-/* ALTER TABLE $Namespace.$Table.getFixedName()    */	
-ALTER TABLE $Namespace.$Table.getFixedName()
+#set($colnum = $PKCon.getPkColumnNames().size())
+#if ($colnum > 0)
+
+ALTER TABLE #if ($Namespace != "")$Namespace.#end$Table.getFixedName()
 ADD CONSTRAINT $!PKCon.getPkName() PRIMARY KEY
-#else
-/* ALTER TABLE $Table.getFixedName()    */
-ALTER TABLE $Table.getFixedName()
-ADD CONSTRAINT PRIMARY KEY
-#end
     (
 #set($colnum = $PKCon.getPkColumnNames().size())
 #foreach ($nextColumn in $PKCon.getPkColumnNames())
@@ -21,21 +21,15 @@ ADD CONSTRAINT PRIMARY KEY
 
     );
 #end
+#end
 ##
 ##       Generate Alters for unique column constraints
 ##
 #if ($Table.getIndexMap().size() > 0)		
-##if ($Table.getIndexMap().size())
 #foreach ($key in $Table.getIndexMap().keySet())
-#if ($Namespace != "")
-## code added/modified for $Namespace by sbalda on 11/14
-/* Alter Table $Namespace.$Table.getFixedName()    */	
-alter table $Namespace.$Table.getFixedName()
-#else
-/* ALTER TABLE $Table.getFixedName()    */		
-ALTER TABLE $Table.getFixedName()
-#end
-ADD CONSTRAINT $!key unique
+
+ALTER TABLE #if ($Namespace != "")$Namespace.#end$Table.getFixedName()
+ADD CONSTRAINT $!key UNIQUE
     (
 #set($colnum = $Table.getIndexMap().get($key).size())
 #foreach ($nextColumn in $Table.getIndexMap().get($key))

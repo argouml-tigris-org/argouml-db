@@ -1,3 +1,9 @@
+##**********************************************
+## *   Copyright (C) 2007 CINCOM SYSTEMS, INC.
+## *   All Rights Reserved
+## **********************************************
+##
+##
 ## SQL 92 source template
 ##############################################################################
 ##       Create Table
@@ -5,20 +11,17 @@
 #if ($Table)
 #set($colnum = $Table.getColumnsVector().size())
 #if ($colnum >0)
-#if ($Namespace != "")
-CREATE TABLE $Namespace.$Table.getFixedName() (
-#else
-CREATE TABLE $Table.getFixedName() (
-#end
+
+CREATE TABLE #if ($Namespace != "")$Namespace.#end$Table.getFixedName() 
+(
 ##-----------------------------------------------------------------------
 ##       Create Table Columns with length, scale, and not null constraints
 ##-----------------------------------------------------------------------
 #foreach ($nextColumn in $Table.getColumnsVector())
-#ColumnDef ($nextColumn),
+#ColumnDef ($nextColumn)#if ($velocityCount < $colnum),
 #end
-#set($hasForeignKeys=$FKCons.size() > 0)
-#PrimaryDef ($PKCon $hasForeignKeys) 
-#ForeignDef ($FKCons)
+#end
+
 );
 #end
 #end

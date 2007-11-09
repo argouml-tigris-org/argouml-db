@@ -140,6 +140,19 @@ public interface ActionsInterface {
     public void generateSource(Object selectedItem, File fileName);
     
     /**
+     * Generates complete SQL statements for the specified object model.
+     * @param selectedItem The object model.
+     * @param includeDrop boolean flag for whether or not to include drop
+     * statements the generated SQL.
+     * @param includeAlter boolean flag for whether or not to include alter 
+     * statements the generated SQL.
+     * @return The SQL string.
+     */
+    public String generateSource(Object selectedItem,
+                                 boolean includeDrop,
+                                 boolean includeAlters);
+    
+    /**
      * Imports databases into the model.
      * @param selectedItem The parent model.
      * @param choices The names of the database. 
