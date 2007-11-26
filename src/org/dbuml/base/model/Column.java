@@ -99,7 +99,8 @@ public class Column extends DBElement {
     }
     
     /**
-     * Determines whether or not this column allows null values.
+     * Determines whether or not this column allows null values. Primary keys
+     * are excluded in teh check.
      * @return true when this column allows true, false otherwise.
      */
     public boolean allowsNulls() {
@@ -107,10 +108,25 @@ public class Column extends DBElement {
     }
     
     /**
-     * Sets the flag of for allowing null values..
+     * Checks whether this column allows nulls.
+     * @param includeKey true to also check for not nulls on primary keys.
+     */
+    public boolean allowsNulls(boolean includeKey) {
+        if (includeKey && isPrimaryKey()) { 
+            return false;
+            // Primary keys are implicitly not null, but some databases
+            // requires it in the the create statement. This method is called
+            // by velocity template for attributes for showing NOT NULL
+            //on primary keys.
+        }
+        return allowNulls;
+    }
+    
+    /**
+     * Sets the flag of for allowing null values.
      * @param flag true or lase to set the flag.
      */
-    public void allowsNulls(boolean flag) {
+    public void setAllowsNulls(boolean flag) {
         this.allowNulls = flag;
     }
     
