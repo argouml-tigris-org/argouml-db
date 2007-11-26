@@ -1107,36 +1107,64 @@ public class ArgoDBModelFacade extends DBModelFacade {
                 }
             }
             
-            // decorate the target End
+            // decorate the source end
             Object targetModel = dbAsso.getTargetModel();
             if (targetModel != null) {
-                Object toEnd = Model.getFacade().getAssociationEnd(
-                    targetModel,  asso);
-                String targetEndName = dbAsso.getTargetEndName();
-                if (targetEndName != null) {
-                    Model.getCoreHelper().setName(toEnd, targetEndName);
+                Object fromEnd = Model.getFacade().getAssociationEnd(
+                    sourceModel,  asso);
+                String sourceEndName = dbAsso.getSourceEndName();
+                if (sourceEndName != null) {
+                    Model.getCoreHelper().setName(fromEnd, sourceEndName);
                 }
-                String targetEndStereoStr = dbAsso.getTargetEndStereoString();
-                if (targetEndStereoStr != null) {
-                    this.addStereotype(targetEndStereoStr, toEnd);
+                String sourceEndStereoStr = dbAsso.getSourceEndStereoString();
+                if (sourceEndStereoStr != null) {
+                    this.addStereotype(sourceEndStereoStr, fromEnd);
                 }
                 
                 // add multiplicity
-                if (dbAsso.isTargetMultiplicityAtMostOne()) {
-                    Model.getCoreHelper().setMultiplicity(toEnd, "0_1");
-                } else if (dbAsso.isTargetMultiplicityAtLeastOne()) {
-                    Model.getCoreHelper().setMultiplicity(toEnd, "1_N");
-                } else if (dbAsso.isTargetMultiplicityZeroOrMore()) {
-                    Model.getCoreHelper().setMultiplicity(toEnd, "0_N");
+                if (dbAsso.isSourceMultiplicityAtMostOne()) {
+                    Model.getCoreHelper().setMultiplicity(fromEnd, "0_1");
+                } else if (dbAsso.isSourceMultiplicityAtLeastOne()) {
+                    Model.getCoreHelper().setMultiplicity(fromEnd, "1_N");
+                } else if (dbAsso.isSourceMultiplicityZeroOrMore()) {
+                    Model.getCoreHelper().setMultiplicity(fromEnd, "0_N");
                 }
                 // default is 1_1
                 
-                if (dbAsso.isTargetOrdered()) {
-                    // add Ordering to toEnd
-                    Model.getCoreHelper().setOrdering(toEnd,
+                if (dbAsso.isSourceOrdered()) {
+                    // add Ordering to fromEnd
+                    Model.getCoreHelper().setOrdering(fromEnd,
                         Model.getOrderingKind().getOrdered());
                 }
             }
+//            if (targetModel != null) {
+//                Object toEnd = Model.getFacade().getAssociationEnd(
+//                    targetModel,  asso);
+//                String targetEndName = dbAsso.getTargetEndName();
+//                if (targetEndName != null) {
+//                    Model.getCoreHelper().setName(toEnd, targetEndName);
+//                }
+//                String targetEndStereoStr = dbAsso.getTargetEndStereoString();
+//                if (targetEndStereoStr != null) {
+//                    this.addStereotype(targetEndStereoStr, toEnd);
+//                }
+//                
+//                // add multiplicity
+//                if (dbAsso.isTargetMultiplicityAtMostOne()) {
+//                    Model.getCoreHelper().setMultiplicity(toEnd, "0_1");
+//                } else if (dbAsso.isTargetMultiplicityAtLeastOne()) {
+//                    Model.getCoreHelper().setMultiplicity(toEnd, "1_N");
+//                } else if (dbAsso.isTargetMultiplicityZeroOrMore()) {
+//                    Model.getCoreHelper().setMultiplicity(toEnd, "0_N");
+//                }
+//                // default is 1_1
+//                
+//                if (dbAsso.isTargetOrdered()) {
+//                    // add Ordering to toEnd
+//                    Model.getCoreHelper().setOrdering(toEnd,
+//                        Model.getOrderingKind().getOrdered());
+//                }
+//            }
             
             this.updateDBElement(dbAsso);
         }
@@ -1532,7 +1560,7 @@ public class ArgoDBModelFacade extends DBModelFacade {
                         right.indexOf("->"));
                     Column col = table.getColumn(colName);
                     if (col != null) {
-                        col.allowsNulls(false);
+                        col.setAllowsNulls(false);
                     }
                 } else {
                     LOG.error(

@@ -302,15 +302,19 @@ public class GenericDBMetadata extends DBMetadata {
                     if (cols[i].isForeignKey()) {
                         if (cols[i].isUnique()) { // no more than 1.
                             if (cols[i].allowsNulls()) {// 0-1
-                                ((FKey)key).setTargetMultiplicityAtMostOne();
+//                                ((FKey)key).setTargetMultiplicityAtMostOne();
+                                ((FKey)key).setSourceMultiplicityAtMostOne();
                             } else {// 1
-                                ((FKey)key).setTargetMultiplicityExactlyOne();
+//                                ((FKey)key).setTargetMultiplicityExactlyOne();
+                                ((FKey)key).setSourceMultiplicityExactlyOne();
                             }
                         } else { // n
                             if (cols[i].allowsNulls()) { //0-n
-                                ((FKey)key).setTargetMultiplicityZeroOrMore();
+//                                ((FKey)key).setTargetMultiplicityZeroOrMore();
+                                ((FKey)key).setSourceMultiplicityZeroOrMore();
                             } else { // 1-n
-                                ((FKey)key).setTargetMultiplicityAtLeastOne();
+//                                ((FKey)key).setTargetMultiplicityAtLeastOne();
+                                ((FKey)key).setSourceMultiplicityAtLeastOne();
                             }
                         }
                     }
@@ -514,7 +518,7 @@ public class GenericDBMetadata extends DBMetadata {
         
         ResultSet rs = (ResultSet) resultset;
         // resolve some dependencies.
-        column.allowsNulls(!"NO".equals(rs.getString("IS_NULLABLE"))); // dep
+        column.setAllowsNulls(!"NO".equals(rs.getString("IS_NULLABLE"))); // dep
         column.setTypeName(rs.getString("TYPE_NAME")); // dep
         
         short jdbcType = rs.getShort("DATA_TYPE");

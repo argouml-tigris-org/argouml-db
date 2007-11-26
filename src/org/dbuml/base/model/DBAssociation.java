@@ -26,8 +26,10 @@ public class DBAssociation extends DBElement {
     
     // should the default be 1-1 or 0-*, how do we know it?
     private String targetMultiplicity = MULTIPLICITY_EXACTLY_ONE;
+    private String sourceMultiplicity = MULTIPLICITY_EXACTLY_ONE;
     
     private boolean targetOrdering = false;
+    private boolean sourceOrdering = false;
     
     
     /**
@@ -185,6 +187,13 @@ public class DBAssociation extends DBElement {
     }
     
     /**
+     * Sets the multiplicity of the source to be exactly one.
+     */
+    public void setSourceMultiplicityExactlyOne() {
+        this.sourceMultiplicity = MULTIPLICITY_EXACTLY_ONE;
+    }
+    
+    /**
      * Determine whether or not the multiplicity of the target is exactly one.
      * @return true or false.
      */
@@ -193,10 +202,25 @@ public class DBAssociation extends DBElement {
     }
     
     /**
+     * Determine whether or not the multiplicity of the source is exactly one.
+     * @return true or false.
+     */
+    public boolean isSourceMultiplicityExactlyOne() {
+        return (this.sourceMultiplicity == MULTIPLICITY_EXACTLY_ONE);
+    }
+    
+    /**
      * Sets the multiplicity of the target to be no more than one.
      */
     public void setTargetMultiplicityAtMostOne() {
         this.targetMultiplicity = MULTIPLICITY_ATMOST_ONE;
+    }
+    
+    /**
+     * Sets the multiplicity of the source to be no more than one.
+     */
+    public void setSourceMultiplicityAtMostOne() {
+        this.sourceMultiplicity = MULTIPLICITY_ATMOST_ONE;
     }
     
     /**
@@ -209,10 +233,26 @@ public class DBAssociation extends DBElement {
     }
     
     /**
+     * Determines whether or not the multiplicity of the source is no more 
+     * than one.
+     * @return true or false.
+     */
+    public boolean isSourceMultiplicityAtMostOne() {
+        return (this.sourceMultiplicity == MULTIPLICITY_ATMOST_ONE);
+    }
+    
+    /**
      * Sets the multiplicity of the target to be one or more.
      */
     public void setTargetMultiplicityAtLeastOne() {
         this.targetMultiplicity = MULTIPLICITY_ATLEAST_ONE;
+    }
+    
+    /**
+     * Sets the multiplicity of the source to be one or more.
+     */
+    public void setSourceMultiplicityAtLeastOne() {
+        this.sourceMultiplicity = MULTIPLICITY_ATLEAST_ONE;
     }
     
     /**
@@ -224,10 +264,25 @@ public class DBAssociation extends DBElement {
     }
     
     /**
+     * Determines whether or not the multiplicity of the source is one or more.
+     * @return true or false.
+     */
+    public boolean isSourceMultiplicityAtLeastOne() {
+        return (this.sourceMultiplicity == MULTIPLICITY_ATLEAST_ONE);
+    }
+    
+    /**
      * Sets the multiplicity of the target to be zero or more.
      */
     public void setTargetMultiplicityZeroOrMore() {
         this.targetMultiplicity = MULTIPLICITY_ZERO_OR_MORE;
+    }
+    
+    /**
+     * Sets the multiplicity of the source to be zero or more.
+     */
+    public void setSourceMultiplicityZeroOrMore() {
+        this.sourceMultiplicity = MULTIPLICITY_ZERO_OR_MORE;
     }
     
     /**
@@ -239,11 +294,27 @@ public class DBAssociation extends DBElement {
     }
     
     /**
-     * Sets that the target ordered.
+     * Determines whether or not the multiplicity of the source is zero or more.
+     * @return true or false.
+     */
+    public boolean isSourceMultiplicityZeroOrMore() {
+        return (this.sourceMultiplicity == MULTIPLICITY_ZERO_OR_MORE);
+    }
+    
+    /**
+     * Sets that the target is ordered.
      * @param ordered true for an ordered target, and false otherwise.
      */
     public void setTargetOrdering(boolean ordered) {
         this.targetOrdering = ordered;
+    }
+    
+    /**
+     * Sets that the source is ordered.
+     * @param ordered true for an ordered target, and false otherwise.
+     */
+    public void setSourceOrdering(boolean ordered) {
+        this.sourceOrdering = ordered;
     }
     
     /**
@@ -252,6 +323,14 @@ public class DBAssociation extends DBElement {
      */
     public boolean isTargetOrdered() {
         return this.targetOrdering;
+    }
+    
+    /**
+     * Is the target ordered.
+     * @return ture or false.
+     */
+    public boolean isSourceOrdered() {
+        return this.sourceOrdering;
     }
     
 }
