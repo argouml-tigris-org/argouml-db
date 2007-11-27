@@ -323,6 +323,9 @@ the generation of SQL statements and generation of UML models from database cata
       file="${module.root}/dbuml.bat"/>
     
     <copy todir="${release.dest}"
+      file="${module.root}/dbuml.sh"/>
+    
+    <copy todir="${release.dest}"
       file="${module.root}/DB-UML.LICENSE.txt"/>
     <copy todir="${release.dest}"
       file="${module.root}/Readme.htm"/>
