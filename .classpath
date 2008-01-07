@@ -4,11 +4,11 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="/argouml-core-lib/antlrall-2.7.2.jar"/>
 	<classpathentry kind="lib" path="/argouml-core-lib/commons-logging-1.0.2.jar"/>
-	<classpathentry kind="lib" path="/argouml-core-lib/gef-0.12.4M4.jar" sourcepath="/gef"/>
+	<classpathentry kind="lib" path="/argouml-core-lib/gef-0.12.4BETA.jar" sourcepath="/gef"/>
 	<classpathentry kind="lib" path="/argouml-core-lib/log4j-1.2.6.jar"/>
 	<classpathentry kind="lib" path="/argouml-core-lib/ocl-argo-1.1.jar"/>
 	<classpathentry kind="lib" path="/argouml-core-lib/swidgets-0.1.4.jar"/>
-	<classpathentry kind="lib" path="/argouml-core-lib/toolbar-1.4.jar" sourcepath="/toolbar"/>
+	<classpathentry kind="lib" path="/argouml-core-lib/toolbar-1.4.1-20071227.jar" sourcepath="/toolbar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/argouml"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/argouml-core-model"/>
 	<classpathentry kind="lib" path="lib/velocity-1.4.jar"/>
