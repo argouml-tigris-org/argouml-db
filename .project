@@ -3,6 +3,7 @@
 	<name>argouml-module-db</name>
 	<comment></comment>
 	<projects>
+		<project>argouml</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
