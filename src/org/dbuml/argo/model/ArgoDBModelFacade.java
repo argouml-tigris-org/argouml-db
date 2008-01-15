@@ -982,7 +982,20 @@ public class ArgoDBModelFacade extends DBModelFacade {
             if (forView) {
                 mType = p.findType(typeName, true);
             } else {
-                mType = p.findType(typeName.toUpperCase(), false);
+                if (java.sql.Types.OTHER == column.getJdbcType() ) {
+                    // add user defined data type. 
+                    //for example oracle's TIMESTAMP(n)
+                    mType = p.findType(typeName.toUpperCase(), false);
+                    if (mType == null) {
+                        // Create a datatype
+                        mType = Model.getCoreFactory().buildDataType(
+                                typeName.toUpperCase(),
+                               getPackage(getOwningDatabase(
+                                tableModel).getDefaultTypesPkgName()));
+                    }
+                } else {
+                   mType = p.findType(typeName.toUpperCase(), false);
+                }
             }
         }
         if (mType == null) {
