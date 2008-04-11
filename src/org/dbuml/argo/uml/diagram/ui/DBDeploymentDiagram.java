@@ -5,6 +5,7 @@
 package org.dbuml.argo.uml.diagram.ui;
 
 import java.beans.PropertyVetoException;
+
 import javax.swing.Action;
 
 import org.apache.log4j.Logger;
@@ -12,18 +13,16 @@ import org.argouml.kernel.ProjectManager;
 import org.argouml.model.Model;
 import org.argouml.uml.diagram.deployment.DeploymentDiagramGraphModel;
 import org.argouml.uml.diagram.deployment.ui.UMLDeploymentDiagram;
-import org.argouml.swingext.ToolBarUtility;
-
+import org.argouml.util.ToolBarUtility;
+import org.dbuml.argo.uml.ui.ActionCreateDatabase;
+import org.dbuml.argo.uml.ui.ActionCreateEdge;
+import org.dbuml.argo.uml.ui.ActionCreateSchema;
+import org.dbuml.argo.uml.ui.CommandEdge;
+import org.dbuml.base.database.DBMetadata;
+import org.dbuml.base.model.DBModelFacade;
 import org.tigris.gef.base.LayerPerspective;
 import org.tigris.gef.base.LayerPerspectiveMutable;
 import org.tigris.gef.base.ModeCreatePolyEdge;
-import org.dbuml.argo.uml.ui.ActionCreateDatabase;
-import org.dbuml.argo.uml.ui.ActionCreateSchema;
-import org.dbuml.base.database.DBMetadata;
-import org.dbuml.base.model.DBModelFacade;
-
-import org.dbuml.argo.uml.ui.CommandEdge;
-import org.dbuml.argo.uml.ui.ActionCreateEdge;
 
 /**
  * Deployment diagram for DBUML models.
