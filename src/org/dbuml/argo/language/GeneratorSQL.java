@@ -10,26 +10,22 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Vector;
 
 import org.apache.log4j.Logger;
-
-import org.argouml.uml.generator.CodeGenerator;
-import org.argouml.uml.generator.SourceUnit;
+import org.argouml.application.helpers.ResourceLoaderWrapper;
 import org.argouml.model.Model;
 import org.argouml.notation.Notation;
+import org.argouml.notation.NotationName;
+import org.argouml.uml.generator.CodeGenerator;
 import org.argouml.uml.generator.GeneratorHelper;
 import org.argouml.uml.generator.GeneratorManager;
 import org.argouml.uml.generator.Language;
-import org.argouml.application.helpers.ResourceLoaderWrapper;
-import org.argouml.notation.NotationName;
-
-import org.dbuml.base.factory.Factory;
-import org.dbuml.base.model.DBModelFacade;
+import org.argouml.uml.generator.SourceUnit;
 import org.dbuml.base.controller.ActionsInterface;
+import org.dbuml.base.factory.Factory;
 import org.dbuml.base.i18n.Translator;
+import org.dbuml.base.model.DBModelFacade;
 
 /**************************************************************************
  *  GeneratorSQL is called by:
@@ -150,9 +146,9 @@ public class GeneratorSQL implements CodeGenerator {
      * Generate files for element 'o'
      * Return the collection of files (as Strings).
      */
-    private Collection generateFilesForElem(Object o,
+    private Collection<String> generateFilesForElem(Object o,
             String path) {
-        Vector ret = new Vector();
+        List<String> ret = new ArrayList<String>();
            
         String pathname = createDirectoriesPathname(o, path);
         
@@ -251,9 +247,7 @@ public class GeneratorSQL implements CodeGenerator {
      */
     public Collection generate(Collection elements, boolean deps) {
         List ret = new ArrayList();
-        for (Iterator it = elements.iterator(); it.hasNext(); ) {
-            
-            Object elem = it.next();
+        for (Object elem : elements) {
             String path = generatePath(elem);
             String name = Model.getFacade().getName(elem) + "sql";
             String content = generateSource(elem); 
@@ -277,8 +271,7 @@ public class GeneratorSQL implements CodeGenerator {
      */
     public Collection generateFileList(Collection elements, boolean deps) {
         List ret = new ArrayList();
-        for (Iterator it = elements.iterator(); it.hasNext(); ) {
-            Object elem = it.next();
+        for (Object elem : elements) {
             ret.add(Model.getFacade().getName(elem) + ".sql");
         }
         return null;
@@ -298,8 +291,7 @@ public class GeneratorSQL implements CodeGenerator {
     public Collection generateFiles(Collection elements, String path,
             boolean deps) {
         List ret = new ArrayList();
-        for (Iterator it = elements.iterator(); it.hasNext(); ) {
-            Object elem = it.next();
+        for (Object elem : elements) {
             ret.addAll(generateFilesForElem(elem, path));
         }
         return ret;
