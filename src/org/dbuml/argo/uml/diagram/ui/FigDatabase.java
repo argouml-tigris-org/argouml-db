@@ -101,6 +101,7 @@ public class FigDatabase extends org.argouml.uml.diagram.deployment.ui.FigCompon
      * @return the text to be shown while placing node in diagram
      */
     public String placeString() {
+        // TODO: Localize user visible strings using Translator
         return "new " + getDBFigName();
     }
     
