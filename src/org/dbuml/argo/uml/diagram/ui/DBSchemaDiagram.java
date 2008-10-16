@@ -12,10 +12,10 @@ import javax.swing.ImageIcon;
 
 import org.argouml.kernel.ProjectManager;
 import org.argouml.model.Model;
-import org.argouml.ui.targetmanager.TargetManager;
 import org.argouml.uml.diagram.static_structure.ClassDiagramGraphModel;
 import org.argouml.uml.diagram.static_structure.ui.ClassDiagramRenderer;
 import org.argouml.uml.diagram.static_structure.ui.UMLClassDiagram;
+import org.argouml.uml.ui.foundation.core.ActionAddOperation;
 import org.argouml.util.ToolBarUtility;
 import org.dbuml.argo.uml.ui.ActionCreateColumn;
 import org.dbuml.argo.uml.ui.ActionCreateEdge;
@@ -176,8 +176,7 @@ public class DBSchemaDiagram extends UMLClassDiagram {
      */
     private Action getActionOperation() {
         if (actionOperation == null) {
-            actionOperation =
-                    TargetManager.getInstance().getAddOperationAction();
+            actionOperation = new ActionAddOperation();
         }
         return actionOperation;
     }
@@ -186,7 +185,7 @@ public class DBSchemaDiagram extends UMLClassDiagram {
         // This calls the getters to fetch actions even though the
         // action variables are defined is instances of this class.
         // This is because any number of action getters could have
-        // been overridden in a descendent and it is the action from
+        // been overridden in a descendant and it is the action from
         // that overridden method that should be returned in the array.
         Object[] actions = {
             getActionAssociation(),
