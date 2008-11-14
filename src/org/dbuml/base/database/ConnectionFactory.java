@@ -31,6 +31,8 @@ public abstract class ConnectionFactory {
             java.lang.NoSuchMethodException,
             java.lang.InstantiationException, java.lang.IllegalAccessException,
             java.lang.reflect.InvocationTargetException {
+        // TODO: This should use the module's classloader so that
+        // it doesn't pollute the higher classloaders for other modules
         Class.forName(sDriver, true, ClassLoader.getSystemClassLoader());
     }
     
