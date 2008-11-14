@@ -15,17 +15,16 @@ package org.dbuml.argo.ui.explorer;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JPopupMenu;
 import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreePath;
 
+import org.argouml.ui.ProjectActions;
 import org.argouml.ui.explorer.DnDExplorerTree;
-
-import org.argouml.ui.ProjectBrowser;
 import org.argouml.ui.targetmanager.TargetManager;
 
 
@@ -120,9 +119,9 @@ public class ExplorerTree extends DnDExplorerTree {
         private void myDoubleClick() {
             Object target = TargetManager.getInstance().getTarget();
             if (target != null) {
-                Vector show = new Vector();
+                List show = new ArrayList();
                 show.add(target);
-                ProjectBrowser.getInstance().jumpToDiagramShowing(show);
+                ProjectActions.jumpToDiagramShowing(show);
             }
         }
 
