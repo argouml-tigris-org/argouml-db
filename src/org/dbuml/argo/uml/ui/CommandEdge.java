@@ -5,7 +5,9 @@
 
 package org.dbuml.argo.uml.ui;
 
-public class CommandEdge extends org.argouml.ui.CmdSetMode {
+import org.argouml.uml.diagram.ui.ActionSetMode;
+
+public class CommandEdge extends ActionSetMode {
     
     /**
      * 
@@ -17,7 +19,7 @@ public class CommandEdge extends org.argouml.ui.CmdSetMode {
      */
     public CommandEdge(Class eClass, String eString, Class mClass, String mString, String type) {
         super(eClass, eString, mClass, mString);
-        _modeArgs.put("dbtype", type);
-        _modeArgs.put("unidirectional", Boolean.TRUE);
+        modeArgs.put("dbtype", type);
+        modeArgs.put("unidirectional", Boolean.TRUE);
     }
 }

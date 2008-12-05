@@ -1007,7 +1007,7 @@ public class ArgoDBModelFacade extends DBModelFacade {
         Object model =
                 ProjectManager.getManager().getCurrentProject().getModel();
         Object mAttr =
-                Model.getCoreFactory().buildAttribute(tableModel, model, mType);
+                Model.getCoreFactory().buildAttribute(tableModel, mType);
         setVisibilityDefault(mAttr);
         column.setModelElement(mAttr);
         this.updateDBElement(column);
@@ -1251,7 +1251,7 @@ public class ArgoDBModelFacade extends DBModelFacade {
     public void addSchema(Schema schema, Object owner) {
         // Make a package and
         Object objSchema = Model.getModelManagementFactory().buildPackage(
-            schema.getName(), schema.getName());
+            schema.getName());
         Model.getCoreHelper().setNamespace(objSchema, owner); 
         schema.setModelElement(objSchema);
         
@@ -1861,7 +1861,8 @@ public class ArgoDBModelFacade extends DBModelFacade {
                     .buildTaggedValue(sKey, (String) properties.get(sKey));
             collTags.add(objTag);
         }
-        Model.getCoreHelper().setTaggedValues(obj, collTags);
+        Model.getExtensionMechanismsHelper().setTaggedValue(
+                obj, collTags);
     }
     
     /**
@@ -1967,7 +1968,7 @@ public class ArgoDBModelFacade extends DBModelFacade {
         if (mPackage == null) {
             mPackage =
                 Model.getModelManagementFactory().buildPackage(
-                    getRelativePackageName(name), name);
+                    getRelativePackageName(name));
             Model.getCoreHelper().setNamespace(mPackage,
                 ProjectManager.getManager().getCurrentProject().getModel());
             

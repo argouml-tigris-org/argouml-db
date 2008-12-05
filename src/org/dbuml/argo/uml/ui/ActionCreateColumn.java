@@ -79,7 +79,6 @@ public class ActionCreateColumn extends UndoableAction {
         Object attr =
                 Model.getCoreFactory().buildAttribute(
                 classifier,
-                model,
                 intType);
         TargetManager.getInstance().setTarget(attr);
         CreateActions.createColumn(attr);

@@ -87,7 +87,6 @@ public class ActionCreatePKEY extends UndoableAction {
         Object attr =
                 Model.getCoreFactory().buildAttribute(
                 classifier,
-                model,
                 intType);
         TargetManager.getInstance().setTarget(attr);
         CreateActions.createPKEY(attr);

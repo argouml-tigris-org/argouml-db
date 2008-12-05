@@ -7,7 +7,7 @@ package org.dbuml.argo.uml.ui;
 
 
 import javax.swing.Action;
-import org.argouml.ui.CmdSetMode;
+import org.argouml.uml.diagram.ui.ActionSetMode;
 
 /**
  *
@@ -19,7 +19,7 @@ public class ActionCreateEdge extends org.argouml.uml.diagram.ui.RadioAction {
      * @param cmd 
      * @param hint 
      */
-    public ActionCreateEdge(CmdSetMode cmd, String hint) {
+    public ActionCreateEdge(ActionSetMode cmd, String hint) {
         super(cmd);
         putValue(Action.SHORT_DESCRIPTION, hint);
         //putValue(Action.SMALL_ICON, new ImageIcon(getClass().getResource("/org/dbuml/argo/uml/ui/Table1.gif")));
