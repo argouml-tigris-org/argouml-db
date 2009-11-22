@@ -5,9 +5,12 @@
 package org.dbuml.argo.uml.diagram.ui;
 
 import org.tigris.gef.graph.GraphModel;
+import org.argouml.uml.diagram.DiagramSettings;
 import org.dbuml.argo.uml.ui.ActionConnectRegistry;
 import org.dbuml.argo.uml.ui.ActionImportDatabases;
 import org.dbuml.argo.uml.ui.ActionUpdateCatalog;
+
+import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 import java.util.Vector;
 import org.dbuml.base.model.DBModelFacade;
@@ -26,7 +29,7 @@ public class FigRegistry extends org.argouml.uml.diagram.deployment.ui.FigCompon
      * @param node Model element.
      */
     public FigRegistry(GraphModel gm, Object node) {
-        super(gm, node);
+        super(node, new Rectangle(0, 0, 0, 0), new DiagramSettings());
         setFillColor(filler);
     }
     
@@ -34,7 +37,7 @@ public class FigRegistry extends org.argouml.uml.diagram.deployment.ui.FigCompon
      * Creates new FigRegistry.
      */
     public FigRegistry() {
-        super();
+        super(null, new Rectangle(0, 0, 0, 0), new DiagramSettings());
         setFillColor(filler);
     }
     

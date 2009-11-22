@@ -6,6 +6,8 @@
 package org.dbuml.argo.uml.diagram.ui;
 
 import org.tigris.gef.graph.GraphModel;
+
+import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 import java.util.Vector;
 import java.util.Iterator;
@@ -21,6 +23,7 @@ import org.dbuml.argo.uml.ui.ActionAddNotNullConstraint;
 import org.dbuml.argo.uml.ui.ActionAddUniqueConstraint;
 
 import org.argouml.ui.ArgoJMenu;
+import org.argouml.uml.diagram.DiagramSettings;
 import org.argouml.uml.diagram.ui.ActionAddNote;
 import org.argouml.i18n.Translator;
 
@@ -40,7 +43,7 @@ public class FigTable extends org.argouml.uml.diagram.static_structure.ui.FigCla
      * @param h 
      */
     public FigTable(Object modelElement, int x, int y, int w, int h) {
-        super(modelElement, x, y, w, h);
+        super(modelElement, new Rectangle(x, y, w, h), new DiagramSettings());
         setFillColor( getFiller());
     }
     
@@ -51,7 +54,7 @@ public class FigTable extends org.argouml.uml.diagram.static_structure.ui.FigCla
      * @param node the UML element
      */
     public FigTable(GraphModel gm, Object node) {
-        super(gm, node);
+        super(node, new Rectangle(0, 0, 0, 0), new DiagramSettings());
         setFillColor( getFiller());
     }
     

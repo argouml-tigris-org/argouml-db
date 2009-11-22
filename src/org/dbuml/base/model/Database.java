@@ -5,10 +5,15 @@
 
 package org.dbuml.base.model;
 
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.List;
 import java.util.Properties;
 import java.util.TreeMap;
 import java.util.Vector;
+
+import org.apache.log4j.Logger;
 import org.dbuml.base.database.DBMetadataCache;
 import org.dbuml.base.database.DBMetadata;
 import org.dbuml.base.factory.Factory;
@@ -74,6 +79,7 @@ public class Database extends DBElement {
     private static List propNames;
     
     private Factory factory = null;
+    private static Logger logger = Logger.getLogger(Database.class);
     /**
      * Creates a new instance of Database.
      */
@@ -90,12 +96,20 @@ public class Database extends DBElement {
         // Properties are sorted in their respective order
         // in propNames list.
         super(sName, new TreeMap(new KeyComparator(propNames)));
-        setProperty(DRIVER, "sun.jdbc.odbc.JdbcOdbcDriver");
-        setProperty(URL, "jdbc:odbc:data source name");
-        setProperty(USER, "Public");
-        setProperty(PASSWORD, "");
-        setProperty(FACTORY, "org.dbuml.base.factory.GenericFactory");
-        setProperty(SUPPORTS_SCHEMA, "false");
+        Properties properties = new Properties();
+        try {
+            properties.load(new FileReader("database.properties"));
+            _props.putAll(properties);
+        } catch (FileNotFoundException e) {
+            setProperty(DRIVER, "sun.jdbc.odbc.JdbcOdbcDriver");
+            setProperty(URL, "jdbc:odbc:data source name");
+            setProperty(USER, "Public");
+            setProperty(PASSWORD, "");
+            setProperty(FACTORY, "org.dbuml.base.factory.GenericFactory");
+            setProperty(SUPPORTS_SCHEMA, "false");
+        } catch (IOException e) {
+            logger.error("Error while reading database.properties", e);
+        }
     }
     
     /**

@@ -42,7 +42,7 @@ the generation of SQL statements and generation of UML models from database cata
     <tstamp/>
 
     <property file="module.properties"/>
-    <property file="${argo.root.dir}/src_new/default.properties"/>
+    <property file="${argo.root.dir}/default.properties"/>
 
     <property name="Name" value="ArgoModule-${argo.module.name}"/>
     <property name="name" value="argomodule-${argo.module.name}"/>
@@ -115,7 +115,7 @@ the generation of SQL statements and generation of UML models from database cata
       <fileset dir="${module.src.dir}/org/dbuml/base/i18n" includes="*.properties"/>
     </copy>
     <copy todir="${module.build.dest}/org/dbuml/argo/Images">
-      <fileset dir="${module.src.dir}/org/dbuml/argo/images" includes="**/**"/>
+      <fileset dir="${module.src.dir}/org/dbuml/argo/Images" includes="**/**"/>
     </copy>
     <copy todir="${module.build.dest}/org/dbuml/argo/uml/diagram/ui">
       <fileset dir="${module.src.dir}/org/dbuml/argo/uml/diagram/ui" includes="*.gif"/>
@@ -126,8 +126,8 @@ the generation of SQL statements and generation of UML models from database cata
     <copy todir="${module.build.dest}/org/dbuml/base/controller/ui">
       <fileset dir="${module.src.dir}/org/dbuml/base/controller/ui" includes="*.form"/>
     </copy>
-    <copy todir="${module.build.dest}/org/dbuml/base/controller/ui/images">
-      <fileset dir="${module.src.dir}/org/dbuml/base/controller/ui/images" includes="**/**"/>
+    <copy todir="${module.build.dest}/org/dbuml/base/controller/ui/Images">
+      <fileset dir="${module.src.dir}/org/dbuml/base/controller/ui/Images" includes="**/**"/>
     </copy>
     <copy todir="${module.build.dest}/org/dbuml/base/transform/templates">
       <fileset dir="${module.src.dir}/org/dbuml/base/transform/templates" includes="**/**" excludes=".svn/**"/>

@@ -8,6 +8,8 @@ package org.dbuml.argo.uml.diagram.ui;
 import org.dbuml.argo.uml.ui.ActionImportTablesFromCatalog;
 import org.dbuml.argo.uml.ui.ActionImportViews;
 import org.dbuml.argo.uml.ui.ActionUpdateCatalog;
+
+import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 import java.util.Vector;
 import org.dbuml.base.i18n.Translator;
@@ -15,6 +17,7 @@ import org.dbuml.base.model.Database;
 import org.dbuml.base.model.DBModelFacade;
 import org.dbuml.argo.uml.ui.ActionGenerateSource;
 import org.argouml.ui.targetmanager.TargetManager;
+import org.argouml.uml.diagram.DiagramSettings;
 import org.tigris.gef.graph.GraphModel;
 
 
@@ -34,7 +37,7 @@ public class FigSchema extends org.argouml.uml.diagram.static_structure.ui.FigPa
      * @param y the y coordinate of the location
      */
     public FigSchema(Object node, int x, int y) {
-        super(node, x, y);
+        super(node, new Rectangle(x, y, 0, 0), new DiagramSettings());
         setFillColor(filler);
     }
     
@@ -44,7 +47,7 @@ public class FigSchema extends org.argouml.uml.diagram.static_structure.ui.FigPa
      * @param node the UML element
      */
     public FigSchema(Object node) {
-        super(node, 0, 0);
+        super(node, new Rectangle(0, 0, 0, 0), new DiagramSettings());
         setFillColor(filler);
     }
     
@@ -54,7 +57,7 @@ public class FigSchema extends org.argouml.uml.diagram.static_structure.ui.FigPa
      * @param node the UML element 
      */
     public FigSchema(GraphModel gm, Object node) {
-        super(gm, node);
+        super(node, new Rectangle(0, 0, 0, 0), new DiagramSettings());
         setFillColor(filler);
     }
     

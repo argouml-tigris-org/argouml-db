@@ -37,7 +37,7 @@ import org.dbuml.base.factory.Factory;
 import org.apache.log4j.Logger;
 
 /**
- * A façade class for Argo models.
+ * A faï¿½ade class for Argo models.
  * @author  jgunderson
  */
 public class ArgoDBModelFacade extends DBModelFacade {
@@ -1008,6 +1008,7 @@ public class ArgoDBModelFacade extends DBModelFacade {
                 ProjectManager.getManager().getCurrentProject().getModel();
         Object mAttr =
                 Model.getCoreFactory().buildAttribute(tableModel, mType);
+        Model.getCoreHelper().addFeature(tableModel, mAttr);
         setVisibilityDefault(mAttr);
         column.setModelElement(mAttr);
         this.updateDBElement(column);
