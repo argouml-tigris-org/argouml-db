@@ -5,6 +5,7 @@
 package org.dbuml.argo.uml.diagram.ui;
 
 
+import java.awt.Rectangle;
 import java.beans.PropertyVetoException;
 
 import javax.swing.Action;
@@ -12,11 +13,13 @@ import javax.swing.ImageIcon;
 
 import org.argouml.kernel.ProjectManager;
 import org.argouml.model.Model;
+import org.argouml.uml.diagram.DiagramElement;
 import org.argouml.uml.diagram.static_structure.ClassDiagramGraphModel;
 import org.argouml.uml.diagram.static_structure.ui.ClassDiagramRenderer;
 import org.argouml.uml.diagram.static_structure.ui.UMLClassDiagram;
 import org.argouml.uml.ui.foundation.core.ActionAddOperation;
 import org.argouml.util.ToolBarUtility;
+import org.dbuml.argo.model.ArgoDBModelFacade;
 import org.dbuml.argo.uml.ui.ActionCreateColumn;
 import org.dbuml.argo.uml.ui.ActionCreateEdge;
 import org.dbuml.argo.uml.ui.ActionCreatePKEY;
@@ -227,5 +230,20 @@ public class DBSchemaDiagram extends UMLClassDiagram {
     }
     
     
+    public DiagramElement createDiagramElement(
+            final Object modelElement,
+            final Rectangle bounds) {
+    	DiagramElement figNode = null;
+   		if (ArgoDBModelFacade.getInstance().representsASchema(modelElement)) {
+   			figNode = new FigSchema(modelElement, bounds.x, bounds.y);
+   		} else if (ArgoDBModelFacade.getInstance().representsATable(modelElement)) {
+   			figNode = new FigTable(modelElement, bounds.x, bounds.y, bounds.width, bounds.height);
+   		}
+   		if (figNode == null) {
+   			figNode = super.createDiagramElement(modelElement, bounds);
+   		}
+        return figNode;
+    }
+
 } /* end class DBSchemaDiagram */
 

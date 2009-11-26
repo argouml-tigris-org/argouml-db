@@ -4,6 +4,7 @@
  **********************************************/
 package org.dbuml.argo.uml.diagram.ui;
 
+import java.awt.Rectangle;
 import java.beans.PropertyVetoException;
 
 import javax.swing.Action;
@@ -11,9 +12,23 @@ import javax.swing.Action;
 import org.apache.log4j.Logger;
 import org.argouml.kernel.ProjectManager;
 import org.argouml.model.Model;
+import org.argouml.uml.diagram.DiagramElement;
+import org.argouml.uml.diagram.DiagramSettings;
 import org.argouml.uml.diagram.deployment.DeploymentDiagramGraphModel;
+import org.argouml.uml.diagram.deployment.ui.FigComponent;
+import org.argouml.uml.diagram.deployment.ui.FigComponentInstance;
+import org.argouml.uml.diagram.deployment.ui.FigMNode;
+import org.argouml.uml.diagram.deployment.ui.FigNodeInstance;
+import org.argouml.uml.diagram.deployment.ui.FigObject;
 import org.argouml.uml.diagram.deployment.ui.UMLDeploymentDiagram;
+import org.argouml.uml.diagram.static_structure.ui.FigClass;
+import org.argouml.uml.diagram.static_structure.ui.FigComment;
+import org.argouml.uml.diagram.static_structure.ui.FigInterface;
+import org.argouml.uml.diagram.static_structure.ui.FigPackage;
+import org.argouml.uml.diagram.ui.FigNodeModelElement;
+import org.argouml.uml.diagram.use_case.ui.FigActor;
 import org.argouml.util.ToolBarUtility;
+import org.dbuml.argo.model.ArgoDBModelFacade;
 import org.dbuml.argo.uml.ui.ActionCreateDatabase;
 import org.dbuml.argo.uml.ui.ActionCreateEdge;
 import org.dbuml.argo.uml.ui.ActionCreateSchema;
@@ -180,6 +195,21 @@ public class DBDeploymentDiagram extends UMLDeploymentDiagram {
             actionDBDependency = new ActionCreateEdge(cmd, "New Dependency");
         }
         return actionDBDependency;
+    }
+    
+    public DiagramElement createDiagramElement(
+            final Object modelElement,
+            final Rectangle bounds) {
+    	DiagramElement figNode = null;
+   		if (ArgoDBModelFacade.getInstance().representsASchema(modelElement)) {
+   			figNode = new FigSchema(modelElement, bounds.x, bounds.y);
+   		} else if (ArgoDBModelFacade.getInstance().representsATable(modelElement)) {
+   			figNode = new FigTable(modelElement, bounds.x, bounds.y, bounds.width, bounds.height);
+   		}
+   		if (figNode == null) {
+   			figNode = super.createDiagramElement(modelElement, bounds);
+   		}
+        return figNode;
     }
     
 } /* end class DBSchemaDiagram */
