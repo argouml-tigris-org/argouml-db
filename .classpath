@@ -4,6 +4,5 @@
 	<classpathentry exported="true" kind="lib" path="lib/velocity-1.4.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/argouml-app"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
