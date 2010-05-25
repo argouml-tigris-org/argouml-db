@@ -36,8 +36,8 @@ public class FigRegistry extends org.argouml.uml.diagram.deployment.ui.FigCompon
     /**
      * Creates new FigRegistry.
      */
-    public FigRegistry() {
-        super(null, new Rectangle(0, 0, 0, 0), new DiagramSettings());
+    public FigRegistry(Object owner, Rectangle bounds, DiagramSettings settings) {
+        super(owner, bounds, settings);
         setFillColor(filler);
     }
     

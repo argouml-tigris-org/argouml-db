@@ -137,12 +137,11 @@ public class DBDeploymentDiagram extends UMLDeploymentDiagram {
         lay.setGraphNodeRenderer(rend);
         lay.setGraphEdgeRenderer(rend);
         setLayer(lay);
-        
-        // If primitive datatypes are not defined, add them.
-        String sTypes[] = DBMetadata.getPrimitiveTypes();
-        if (!(DBModelFacade.getInstance().checkTypes(sTypes))) {
-            DBModelFacade.getInstance().addTypes(sTypes, "types.sql");
-        }
+//        // If primitive datatypes are not defined, add them.
+//        String sTypes[] = DBMetadata.getPrimitiveTypes();
+//        if (!(DBModelFacade.getInstance().checkTypes(sTypes))) {
+//            DBModelFacade.getInstance().addTypes(sTypes, "types.sql");
+//        }
     }
     
     

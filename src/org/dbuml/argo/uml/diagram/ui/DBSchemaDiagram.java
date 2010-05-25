@@ -142,12 +142,6 @@ public class DBSchemaDiagram extends UMLClassDiagram {
         ClassDiagramRenderer rend = new DBSchemaDiagramRenderer(); // singleton
         lay.setGraphNodeRenderer(rend);
         lay.setGraphEdgeRenderer(rend);
-        
-        // If primitive datatypes are not defined, add them.
-        String sTypes[] = DBMetadata.getPrimitiveTypes();
-        if (!(DBModelFacade.getInstance().checkTypes(sTypes))) {
-            DBModelFacade.getInstance().addTypes(sTypes, "types.sql");
-        }
     }
     
     /**

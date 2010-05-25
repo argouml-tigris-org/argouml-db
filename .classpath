@@ -4,5 +4,10 @@
 	<classpathentry exported="true" kind="lib" path="lib/velocity-1.4.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/argouml"/>
+	<classpathentry kind="lib" path="/argouml/src/argouml-build/build/log4j-1.2.6.jar"/>
+	<classpathentry kind="lib" path="/argouml/src/argouml-build/build/gef-0.13.1.jar"/>
+	<classpathentry kind="lib" path="/argouml/src/argouml-build/build/swidgets-0.1.4.jar"/>
+	<classpathentry kind="lib" path="/argouml/src/argouml-build/build/toolbar-1.4.1-20071227.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

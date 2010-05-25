@@ -17,7 +17,9 @@ import org.apache.log4j.Logger;
 
 import org.dbuml.argo.model.ArgoDBModelFacade;
 import org.dbuml.argo.uml.diagram.ui.FigureFactory;
+import org.dbuml.base.database.DBMetadata;
 import org.dbuml.base.i18n.Translator;
+import org.dbuml.base.model.DBModelFacade;
 
 
 /**
@@ -108,6 +110,12 @@ public class DBModule implements ModuleInterface {
         menubar.getTools().add(_deployMenu);
         
         this.initializeFactories();
+
+        // If primitive datatypes are not defined, add them.
+        String sTypes[] = DBMetadata.getPrimitiveTypes();
+        if (!(DBModelFacade.getInstance().checkTypes(sTypes))) {
+            DBModelFacade.getInstance().addTypes(sTypes, "types.sql");
+        }
         
         //create default dbuml diagrams
 //        createDefaultDiagrams();

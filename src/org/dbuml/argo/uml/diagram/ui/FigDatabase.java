@@ -43,11 +43,11 @@ public class FigDatabase extends org.argouml.uml.diagram.deployment.ui.FigCompon
     /**
      * Creates new FigDatabase instance.
      */
-    public FigDatabase() {
-        super(null, new Rectangle(0, 0, 0, 0), new DiagramSettings());
+    public FigDatabase(Object owner, Rectangle bounds, DiagramSettings settings) {
+        super(owner, bounds, settings);
         setFillColor(filler);
     }
-    
+
     /**
      * Gets dbuml added actions.
      * @return A vector of actions.
