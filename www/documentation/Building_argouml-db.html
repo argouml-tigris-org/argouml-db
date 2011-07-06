@@ -1,0 +1,273 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=utf-8">
+	<TITLE>Building ArgoUMLdb (version 0.3)</TITLE>
+	<META NAME="GENERATOR" CONTENT="OpenOffice.org 3.2  (Linux)">
+	<META NAME="AUTHOR" CONTENT="Lochrin David">
+	<META NAME="CREATED" CONTENT="20110331;10361100">
+	<META NAME="CHANGEDBY" CONTENT="Lochrin David">
+	<META NAME="CHANGED" CONTENT="20110609;17302800">
+	<META NAME="Info 1" CONTENT="">
+	<META NAME="Info 2" CONTENT="">
+	<META NAME="Info 3" CONTENT="">
+	<META NAME="Info 4" CONTENT="">
+	<META NAME="SDFOOTNOTE" CONTENT=";;;;P">
+	<META NAME="SDENDNOTE" CONTENT="ARABIC">
+	<STYLE TYPE="text/css">
+	<!--
+		@page { margin-left: 3cm; margin-right: 3cm; margin-top: 2.5cm; margin-bottom: 2cm }
+		@page:first { }
+		P { margin-bottom: 0.3cm; direction: ltr; color: #000000; text-align: justify; page-break-inside: avoid; widows: 2; orphans: 2 }
+		P.western { font-family: "Times New Roman", serif; font-size: 11pt; so-language: en-AU }
+		P.cjk { font-family: "Times New Roman", serif; font-size: 11pt }
+		P.ctl { font-family: "Times New Roman", serif; font-size: 11pt }
+		A:link { color: #0000ff }
+		A:visited { color: #800080 }
+		A.western:visited { so-language: en-AU }
+		A.cjk:visited { so-language: en-US }
+		A.ctl:visited { so-language: en-US }
+	-->
+	</STYLE>
+</HEAD>
+<BODY LANG="en-AU" TEXT="#000000" LINK="#0000ff" VLINK="#800080" DIR="LTR">
+<P CLASS="western" ALIGN=CENTER><FONT SIZE=3 STYLE="font-size: 13pt"><U><B>Guide
+to Building ArgoUML and ArgoUML&nbsp;db</B></U></FONT></P>
+<P CLASS="western"><BR><BR>
+</P>
+<P CLASS="western" STYLE="page-break-before: auto; page-break-after: avoid">
+<FONT SIZE=2 STYLE="font-size: 11pt"><B>Preface</B></FONT></P>
+<P CLASS="western"><SPAN STYLE="font-weight: normal">This brief
+document describes how to build a complete ArgoUML&nbsp;db package. 
+However it's intended for </SPAN><SPAN STYLE="font-style: normal"><SPAN STYLE="text-decoration: none"><SPAN STYLE="font-weight: normal">users</SPAN></SPAN></SPAN><SPAN STYLE="font-weight: normal">
+of the tool such as Software Engineering students and application
+developers rather than ArgoUML developers, who are thoroughly
+familiar with the process.</SPAN></P>
+<P CLASS="western" STYLE="font-weight: normal">Users will find the
+initial effort involved in building the package proves well
+worthwhile.  Model&nbsp;driven design enables the software-class
+structure and database table relationships to be much more closely
+related to actual project requirements, and not lost in the low-level
+detail of SQL and Java (or other language) coding.  The complete
+ArgoUML&nbsp;db package includes a “design critic” which checks
+the graphical design for consistency, and SQL code and skeleton
+software-class code can be generated directly from the UML diagrams.</P>
+<P CLASS="western" STYLE="font-weight: normal">These notes have been
+written specifically for Linux, however most of it applies fairly
+directly to Microsoft Windows.</P>
+<P CLASS="western" STYLE="font-weight: normal">The prerequisite
+software for both Linux &amp; Windows consists of the Java&nbsp;6 SDK
+(not Java&nbsp;5) and at least version&nbsp;5 of the Apache
+Subversion (SVN) software version &amp; revision control client. 
+ArgoUML will require Java&nbsp;6 in the near future and the &nbsp;db
+plugin already needs Java&nbsp;6, so&nbsp;Java&nbsp;6 is assumed
+here.  Apache SVN is open-source software and can be downloaded free
+of charge.  Other tools required, such as ANT and the Xerces XML
+parser, are included in the “tools” directory of ArgoUML.</P>
+<P CLASS="western" ALIGN=CENTER STYLE="font-weight: normal">_________________________________</P>
+<P CLASS="western" STYLE="font-weight: normal"><BR><BR>
+</P>
+<OL>
+	<LI><P CLASS="western" STYLE="margin-bottom: 0.2cm; page-break-before: auto">
+	It is necessary to build argouml first because building <SPAN STYLE="font-style: normal">argouml&nbsp;db</SPAN>
+	requires some information from the argouml build<SPAN STYLE="font-weight: normal">.</SPAN></P>
+	<P CLASS="western" STYLE="margin-bottom: 0.2cm; font-weight: normal">
+	When this document was written the most recent SVN release of
+	argouml was&nbsp;19545 and the most recent release of argouml-db
+	was&nbsp;80, and they built ArgoUML PRE&nbsp;0.33.6.  The&nbsp;current
+	trunk releases of both packages should always be compatible.</P>
+	<P CLASS="western" STYLE="margin-bottom: 0.2cm; font-weight: normal">
+	Note, these notes may not completely apply to some earlier releases.</P>
+	<P CLASS="western" STYLE="margin-bottom: 0.2cm"><SPAN STYLE="font-weight: normal">I</SPAN>n<SPAN STYLE="font-weight: normal">formation
+	on an SVN revision can be obtained by revision number or date using
+	SVN.  This example uses the command-line client, but most clients
+	also have a GUI:</SPAN></P>
+	<P CLASS="western" ALIGN=LEFT STYLE="margin-bottom: 0.2cm; font-weight: normal; page-break-after: avoid">
+	<FONT FACE="Courier, monospace"># svn info [&nbsp;r&nbsp;NUMBER]
+	[&nbsp;r&nbsp;“{“YYYYMMDD”}”] [etc]
+	http://argouml.tigris.org/svn/argouml/trunk &nbsp;&nbsp;username
+	guest</FONT></P>
+	<P CLASS="western" STYLE="margin-bottom: 0.2cm"></P>
+	<LI><P CLASS="western" ALIGN=JUSTIFY STYLE="margin-bottom: 0.2cm; page-break-before: auto; page-break-after: auto"><A NAME="__RefNumPara__307_919904129"></A>
+	Check out the current version of the ArgoUML source code from SV<SPAN STYLE="text-decoration: none">N
+	into an empty directory with the</SPAN> following command, using a
+	null password if prompted:</P>
+	<P CLASS="western" ALIGN=LEFT STYLE="margin-bottom: 0.2cm; page-break-before: auto; page-break-after: auto">
+	<FONT FACE="Courier, monospace"># svn checkout
+	http://argouml.tigris.org/svn/argouml/trunk &nbsp;&nbsp;username
+	guest</FONT></P>
+	<P CLASS="western" ALIGN=JUSTIFY STYLE="margin-bottom: 0.2cm">For
+	more detailed information refer to the Developer wiki
+	<A CLASS="western" HREF="http://argouml.tigris.org/wiki">http://argouml.tigris.org/wiki</A>
+	 then go to “Building from source” under “Documentation” and
+	Sc.&nbsp;2.1 “Quick Start” for details.</P>
+	<P CLASS="western" ALIGN=JUSTIFY STYLE="margin-bottom: 0.2cm; page-break-before: auto">
+	</P>
+	<LI><P CLASS="western" ALIGN=JUSTIFY STYLE="margin-bottom: 0.2cm; page-break-before: auto; page-break-after: avoid">
+	Check out argouml&nbsp;db from SVN into an empty directory, also
+	with a null password:</P>
+	<P CLASS="western" ALIGN=LEFT STYLE="margin-bottom: 0.2cm; page-break-after: avoid">
+	<FONT FACE="Courier, monospace"># svn checkout
+	http://argouml&nbsp;db.tigris.org/svn/argouml&nbsp;db/trunk
+	&nbsp;&nbsp;username guest</FONT></P>
+	<P CLASS="western" ALIGN=LEFT STYLE="margin-bottom: 0.2cm; font-weight: normal; page-break-before: auto; page-break-after: auto">
+	</P>
+	<LI><P CLASS="western" ALIGN=JUSTIFY STYLE="margin-bottom: 0.2cm; font-weight: normal"><A NAME="__RefNumPara__290_418444039"></A>
+	It's best to have a backup copy of all code before initiating any
+	build as ArgoUML involves a very large download.  So copy the
+	downloaded argouml code into a build subdirectory, say
+	<FONT FACE="Courier, monospace">&lt;argoumlBuild/aBuild&gt;</FONT>,
+	and the downloaded argouml&nbsp;db code into another, say
+	<FONT FACE="Courier, monospace">&lt;argoumlBuild/dbBuild&gt;</FONT>.</P>
+	<P CLASS="western" ALIGN=JUSTIFY STYLE="margin-bottom: 0.2cm; font-weight: normal">
+	</P>
+	<LI><P CLASS="western" ALIGN=JUSTIFY STYLE="margin-bottom: 0.2cm; page-break-before: auto; page-break-after: auto">
+	Ensure the environment variable <FONT FACE="Courier, monospace">JAVA_HOME</FONT>
+	points to the Java&nbsp;6 JDK (though this may prove unnecessary,
+	depending on the Java installation).</P>
+	<P CLASS="western" ALIGN=JUSTIFY STYLE="margin-bottom: 0.2cm">Then
+	change to t<FONT FACE="Times New Roman, serif">he “src”
+	subd</FONT>irectory and run <FONT FACE="Courier, monospace">&lt;build.sh&nbsp;install&gt;</FONT>
+	for a Linux installation or <FONT FACE="Courier, monospace">&lt;build.bat&nbsp;install&gt;</FONT>
+	for Microsoft Windows and the build will proceed.  Any “warning”
+	messages about deprecated usage may be ignored; only an “error”
+	will result in an unsuccessful build.</P>
+	<P CLASS="western" ALIGN=JUSTIFY STYLE="margin-bottom: 0.2cm">The
+	build process will finally display “BUILD SUCCESSFUL”.</P>
+	<P CLASS="western" ALIGN=JUSTIFY STYLE="margin-bottom: 0.2cm">If
+	using the directory structure described in 4. above, the built
+	package will be located in <FONT FACE="Courier, monospace">&lt;path-to-argoumlBuild/aBuild/trunk/build&gt;</FONT><FONT FACE="Times New Roman, serif">
+	and it will contain 48&nbsp;files and one “ext” subdirectory
+	totalling about 15.8&nbsp;Mbyte</FONT>s, though the exact details
+	may change with releases.</P>
+	<P CLASS="western" ALIGN=JUSTIFY STYLE="margin-bottom: 0.2cm"></P>
+	<LI><P CLASS="western" ALIGN=JUSTIFY STYLE="margin-bottom: 0.2cm; page-break-after: avoid">
+	<FONT FACE="Times New Roman, serif">Now we must build ArgoUML&nbsp;db.</FONT></P>
+	<P CLASS="western" ALIGN=JUSTIFY STYLE="margin-bottom: 0.2cm; font-weight: normal">
+	Set the PATH environment variable to include the “ant” tools
+	package included with argouml and export it..  In&nbsp;Linux for
+	example:</P>
+	<P CLASS="western" ALIGN=LEFT STYLE="margin-bottom: 0.2cm; font-weight: normal; page-break-after: avoid">
+	<FONT FACE="Courier, monospace">#
+	PATH=$PATH:path-to-argoumlBuild/aBuild/trunk/tools/apache-ant-1.7.0/bin</FONT></P>
+	<P CLASS="western" ALIGN=LEFT STYLE="margin-bottom: 0.2cm; page-break-after: avoid">
+	<FONT FACE="Courier, monospace"><SPAN STYLE="font-weight: normal">#
+	export </SPAN></FONT><FONT FACE="Times New Roman, serif"><SPAN STYLE="font-weight: normal">PATH</SPAN></FONT></P>
+	<P CLASS="western" STYLE="font-weight: normal"></P>
+	<P CLASS="western" ALIGN=JUSTIFY STYLE="margin-bottom: 0.2cm; page-break-before: auto; page-break-after: avoid">
+	Change to the argouml&nbsp;db directory containing <FONT FACE="Courier, monospace">&lt;build.xml&gt;</FONT>
+	and e<FONT FACE="Times New Roman, serif">dit </FONT><FONT FACE="Courier, monospace">&lt;module.properties&gt;</FONT><FONT FACE="Times New Roman, serif">
+	so “argo.root.dir” points to the “argouml&nbsp;build”
+	subdirectory relative to there, for example:</FONT></P>
+	<P CLASS="western" ALIGN=LEFT STYLE="margin-bottom: 0.2cm; page-break-after: avoid">
+	<FONT FACE="Courier, monospace">argo.root.dir=../../aBuild/trunk/src/argouml-build</FONT></P>
+	<P CLASS="western" ALIGN=JUSTIFY STYLE="margin-bottom: 0.2cm; page-break-after: avoid">
+	<FONT FACE="Times New Roman, serif">The file
+	<FONT FACE="Courier, monospace">&lt;trunk/src/org/dbuml/base/model/DBModelFacade.java&gt;</FONT>
+	may&nbsp;also be edited to remove cedilla accents in the word
+	“Facade” in a few places, however these only appear in comments
+	so the warning diagnostics can be ignored.</FONT></P>
+	<P CLASS="western" ALIGN=JUSTIFY STYLE="margin-bottom: 0.2cm; font-weight: normal; page-break-inside: auto; page-break-before: auto; page-break-after: avoid">
+	Then run:</P>
+	<P CLASS="western" ALIGN=LEFT STYLE="margin-bottom: 0.2cm; font-weight: normal; page-break-after: avoid">
+	<FONT FACE="Courier, monospace"># ant jar</FONT></P>
+	<P CLASS="western" ALIGN=JUSTIFY STYLE="margin-bottom: 0.2cm; font-weight: normal; page-break-inside: auto; page-break-before: auto">
+	</P>
+	<LI><P CLASS="western" ALIGN=JUSTIFY STYLE="margin-bottom: 0.2cm; font-weight: normal; page-break-before: auto; page-break-after: avoid">
+	This build process should also complete by displaying “BUILD
+	SUCCESSFUL”.</P>
+	<P CLASS="western" ALIGN=JUSTIFY STYLE="margin-bottom: 0.2cm; page-break-before: auto">
+	<SPAN STYLE="font-weight: normal">Two “build” directories now
+	exist: the argouml build in its directory tree and the  argouml&nbsp;db
+	build at </SPAN><FONT FACE="Courier, monospace"><SPAN STYLE="font-weight: normal">&lt;path-to-argoumlBuild/dbBuild/trunk/build&gt;</SPAN></FONT></P>
+	<P CLASS="western" ALIGN=JUSTIFY STYLE="margin-bottom: 0cm; page-break-before: auto; page-break-after: avoid">
+	<SPAN STYLE="font-weight: normal">Copy the following files in the
+	argouml&nbsp;db build to the “ext” subdirectory of the argouml
+	build at </SPAN><FONT FACE="Courier, monospace"><SPAN STYLE="font-weight: normal">&lt;path-to-argoumlBuild/aBuild/trunk/build&gt;
+	</SPAN></FONT><SPAN STYLE="font-weight: normal">(later releases of
+	argouml&nbsp;db will do this automatically):</SPAN></P>
+	<P CLASS="western" ALIGN=JUSTIFY STYLE="margin-bottom: 0cm; font-weight: normal; page-break-after: avoid">
+	o	dbuml.jar	from “trunk/build”</P>
+	<P CLASS="western" ALIGN=JUSTIFY STYLE="margin-bottom: 0cm; font-weight: normal; page-break-after: avoid">
+	o	commons-collections-3.0.jar	from “trunk/lib”</P>
+	<P CLASS="western" ALIGN=JUSTIFY STYLE="margin-bottom: 0.2cm; font-weight: normal; page-break-after: avoid">
+	o	velocity-1.4.jar	from “trunk/lib”</P>
+	<P CLASS="western" ALIGN=JUSTIFY STYLE="margin-bottom: 0.2cm; font-weight: normal; page-break-before: auto; page-break-after: avoid">
+	The file postgresql-8.2-505.jdbc2.jar should also be copied from
+	&lt;trunk/lib&gt; if the PostgreSQL database is being used.</P>
+	<P CLASS="western" ALIGN=JUSTIFY STYLE="margin-bottom: 0.2cm; font-weight: normal; page-break-before: auto; page-break-after: avoid">
+	Copying these files to &lt;ext&gt; installs the plugin in the
+	ArgoUML framework.</P>
+	<P CLASS="western" ALIGN=JUSTIFY STYLE="margin-bottom: 0.2cm; font-weight: normal">
+	</P>
+	<LI><P CLASS="western" ALIGN=JUSTIFY STYLE="margin-bottom: 0.2cm; font-weight: normal; page-break-inside: auto; page-break-before: auto; page-break-after: avoid">
+	The ArgoUML “build” directory now contains a complete package
+	which may be copied elsewhere and renamed, for example to
+	“argoumlRun”.  This “argoumlRun” directory may also be moved
+	elsewhere as required.</P>
+</OL>
+<P CLASS="western" ALIGN=CENTER STYLE="margin-bottom: 0.2cm; font-weight: normal; page-break-before: auto; page-break-after: avoid">
+_________________________________</P>
+<P CLASS="western" ALIGN=JUSTIFY STYLE="page-break-before: auto; page-break-after: avoid">
+<BR><BR>
+</P>
+<P CLASS="western" ALIGN=JUSTIFY><B>Running ArgoUML&nbsp;db</B></P>
+<P CLASS="western" ALIGN=JUSTIFY STYLE="font-weight: normal; page-break-before: auto; page-break-after: auto">
+The ArgoUML build for Linux includes a shell script <FONT FACE="Courier, monospace">&lt;argouml.sh&gt;</FONT>
+which can be called via a soft&nbsp;link in the /bin or other
+directory in order to start the application, though note it will need
+“execute” privilege if it's not set.  This works even if the
+build directory is moved, however that requires a new soft&nbsp;link
+of course.</P>
+<P CLASS="western" ALIGN=JUSTIFY STYLE="margin-bottom: 0.2cm; page-break-inside: auto; page-break-after: auto">
+ArgoUML can normally be started either by running “argouml.jar”
+or by calling “org.argouml.application.Main”.  The former method
+is used in the shell script, however an initegration problem in the
+version used in this document requires that the
+&quot;org.argouml.application.Main&quot; form of startup be used if
+ArgoUML&nbsp;db is included.</P>
+<P CLASS="western" ALIGN=JUSTIFY STYLE="margin-bottom: 0.2cm; page-break-inside: auto; page-break-before: auto; page-break-after: avoid">
+The startup script can be modified as follows, where the “java”
+command replaces the one in <FONT FACE="Courier, monospace"><SPAN STYLE="font-weight: normal">&lt;argouml.sh&gt;</SPAN></FONT>.
+ If not familiar with the BASH command language, be sure to pay
+attention to the exact syntax, including the grave accents (or
+reverse single quote marks).</P>
+<P CLASS="western" ALIGN=JUSTIFY STYLE="margin-bottom: 0.2cm; page-break-inside: auto">
+<BR><BR>
+</P>
+<P CLASS="western" ALIGN=LEFT STYLE="margin-left: 1.02cm; margin-bottom: 0.2cm; border-top: none; border-bottom: none; border-left: 1px solid #000000; border-right: none; padding-top: 0cm; padding-bottom: 0cm; padding-left: 0.3cm; padding-right: 0cm; page-break-inside: auto; page-break-before: auto; page-break-after: avoid">
+<FONT FACE="Courier, monospace">jdbc=&quot;path-to-the-MySQL-JDBC-connector/mysql-connector-java-5.0.7-bin.jar&quot;</FONT></P>
+<P CLASS="western" ALIGN=LEFT STYLE="margin-left: 1.02cm; margin-bottom: 0.2cm; border-top: none; border-bottom: none; border-left: 1px solid #000000; border-right: none; padding-top: 0cm; padding-bottom: 0cm; padding-left: 0.3cm; padding-right: 0cm; page-break-inside: auto; page-break-after: avoid">
+<FONT FACE="Courier, monospace">[...]</FONT></P>
+<P CLASS="western" ALIGN=LEFT STYLE="margin-left: 1.02cm; margin-bottom: 0.2cm; border-top: none; border-bottom: none; border-left: 1px solid #000000; border-right: none; padding-top: 0cm; padding-bottom: 0cm; padding-left: 0.3cm; padding-right: 0cm; page-break-inside: auto; page-break-after: avoid">
+<FONT FACE="Courier, monospace">argoMainPath=&quot;`dirname
+$PRG`/argouml.jar&quot;</FONT></P>
+<P CLASS="western" ALIGN=LEFT STYLE="margin-left: 1.02cm; margin-bottom: 0.2cm; border-top: none; border-bottom: none; border-left: 1px solid #000000; border-right: none; padding-top: 0cm; padding-bottom: 0cm; padding-left: 0.3cm; padding-right: 0cm; page-break-inside: auto; page-break-after: avoid">
+<FONT FACE="Courier, monospace">argoDbPath=&quot;`dirname
+$PRG`/ext/dbuml.jar&quot;</FONT></P>
+<P CLASS="western" ALIGN=LEFT STYLE="margin-left: 1.02cm; margin-bottom: 0.2cm; border-top: none; border-bottom: none; border-left: 1px solid #000000; border-right: none; padding-top: 0cm; padding-bottom: 0cm; padding-left: 0.3cm; padding-right: 0cm; page-break-inside: auto; page-break-after: avoid">
+<FONT FACE="Courier, monospace">java -cp
+$argoMainPath:$argoDbPath:$jdbc   org.argouml.application.Main</FONT></P>
+<P CLASS="western" ALIGN=JUSTIFY STYLE="margin-bottom: 0.2cm; page-break-inside: auto; page-break-before: auto">
+<BR><BR>
+</P>
+<P CLASS="western" ALIGN=JUSTIFY STYLE="margin-bottom: 0.2cm; page-break-inside: auto">
+This script can then be dragged and dropped as a logical link on the
+Desktop or anywhere else which is convenient.</P>
+<P CLASS="western" ALIGN=JUSTIFY STYLE="margin-bottom: 0.2cm; page-break-inside: auto">
+<BR><BR>
+</P>
+<P CLASS="western" ALIGN=JUSTIFY STYLE="margin-bottom: 0.2cm; page-break-inside: auto">
+<FONT SIZE=2 STYLE="font-size: 11pt"><B>A.D.L.</B></FONT></P>
+<P CLASS="western" ALIGN=JUSTIFY STYLE="margin-bottom: 0.2cm; page-break-inside: auto">
+<B>9th June  2011</B></P>
+<P CLASS="western" ALIGN=JUSTIFY STYLE="margin-bottom: 0.2cm; page-break-inside: auto">
+<BR><BR>
+</P>
+<DIV TYPE=FOOTER>
+	<P CLASS="western" STYLE="margin-top: 0.5cm; margin-bottom: 0cm; border-top: 1px solid #000000; border-bottom: none; border-left: none; border-right: none; padding-top: 0.2cm; padding-bottom: 0cm; padding-left: 0cm; padding-right: 0cm; page-break-inside: auto; page-break-before: auto">
+	<SDFIELD TYPE=DOCINFO SUBTYPE=TITLE>Building ArgoUMLdb (version 0.3)</SDFIELD>	Page
+	<SDFIELD TYPE=PAGE SUBTYPE=RANDOM FORMAT=PAGE>2</SDFIELD> / <SDFIELD TYPE=DOCSTAT SUBTYPE=PAGE FORMAT=ARABIC>3</SDFIELD></P>
+</DIV>
+</BODY>
+</HTML>
