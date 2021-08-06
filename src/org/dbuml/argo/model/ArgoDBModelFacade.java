@@ -37,7 +37,7 @@ import org.dbuml.base.factory.Factory;
 import org.apache.log4j.Logger;
 
 /**
- * A fa�ade class for Argo models.
+ * A facade class for Argo models.
  * @author  jgunderson
  */
 public class ArgoDBModelFacade extends DBModelFacade {
@@ -47,6 +47,7 @@ public class ArgoDBModelFacade extends DBModelFacade {
     /** Creates a new instance of DBModelFacade */
     public ArgoDBModelFacade() {
         instance = this;
+        ProjectManager.getManager().makeEmptyProject();
     }
     
     /**

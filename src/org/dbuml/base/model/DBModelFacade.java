@@ -6,13 +6,13 @@
 package org.dbuml.base.model;
 
 /**
- * A façade class for DBUML models.
+ * A facade class for DBUML models.
  * @author jgunderson
  */
 
 public abstract class DBModelFacade implements DBModelFacadeInterface {
     /**
-     * The DBModel Façade instance.
+     * The DBModel Facade instance.
      */
     protected static DBModelFacade instance;
     

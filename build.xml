@@ -42,6 +42,7 @@ the generation of SQL statements and generation of UML models from database cata
     <tstamp/>
 
     <property file="module.properties"/>
+    <property name="argo.build.dir" value="${argo.root.dir}/target"/>
     <property file="${argo.root.dir}/default.properties"/>
 
     <property name="Name" value="ArgoModule-${argo.module.name}"/>
@@ -63,7 +64,6 @@ the generation of SQL statements and generation of UML models from database cata
     <property name="module.release.dest" value="${module.root}/release"/>
     <property name="module.release-bundle.dest" value="${module.root}/release-bundle"/>
     <property name="argo.build.dest" value="${argo.build.dir}/classes"/>
-
     <property name="module.jarfile.name" value="dbuml.jar"/>
     <property name="module.jarfile"
               value="${module.build.dir}/${module.jarfile.name}"/>
@@ -76,10 +76,11 @@ the generation of SQL statements and generation of UML models from database cata
     <property name="optimize" value="on"/>
     <property name="deprecation" value="on"/>
 
-    <property name="module.version" value="${argo.core.version}-${DSTAMP}-${TSTAMP}"/>
+     <property name="module.version" value="${argo.core.version}-${DSTAMP}-${TSTAMP}"/>
+     <property name="argouml.jar" value="argouml-jar-with-dependencies.jar"/>
 
     <path id="module.compile.classpath">
-        <pathelement location="${argo.build.dir}/argouml.jar"/>
+        <pathelement location="${argo.build.dir}/${argouml.jar}"/>
         <pathelement location="${ocl-argo.jar.path}"/>
         <pathelement location="${gef.jar.path}"/>
         <pathelement location="${log4j.jar.path}"/>
@@ -89,6 +90,7 @@ the generation of SQL statements and generation of UML models from database cata
         <pathelement location="${antlrall.jar.path}"/>
         <pathelement location="${argo.build.dir}/argouml-model.jar"/>
         <pathelement location="${module.lib.dir}/velocity-1.4.jar"/>
+        <pathelement location="${module.lib.dir}/log4j-1.2.6.jar"/>
     </path>
       
     <path id="module.compile-tests.classpath">
@@ -110,7 +112,8 @@ the generation of SQL statements and generation of UML models from database cata
     <echo message="Preparing the build directories"/>
     <mkdir dir="${module.build.dest}"/>
     <mkdir dir="${module.tests.classes}"/>
-    
+    <mkdir dir="${argo.build.dir}/ext"/>
+
     <copy todir="${module.build.dest}/org/dbuml/base/i18n">
       <fileset dir="${module.src.dir}/org/dbuml/base/i18n" includes="*.properties"/>
     </copy>
@@ -141,9 +144,9 @@ the generation of SQL statements and generation of UML models from database cata
   <target name="compile" depends="prepare" 
           description="compiles the module source code"> 
   	
-    <available file="${argo.build.dir}/argouml.jar" property="argo.is.packaged"/>
+    <available file="${argo.build.dir}/${argouml.jar}" property="argo.is.packaged"/>
     <fail unless="argo.is.packaged" 
-      message="You must package ArgoUML first, e.g., argouml/src_new> ant package"/>
+      message="You must package ArgoUML first. Expected ${argo.build.dir}/${argouml.jar}"/>
 
     <javac srcdir="${module.src.dir}"
            destdir="${module.build.dest}"
@@ -152,8 +155,8 @@ the generation of SQL statements and generation of UML models from database cata
            debug="${debug}"
            deprecation="${deprecation}"
            optimize="${optimize}"
-           source="1.5"
-           target="1.5">
+           source="1.6"
+           target="1.6">
         <classpath>
             <path refid="module.compile.classpath"/>
         </classpath>
