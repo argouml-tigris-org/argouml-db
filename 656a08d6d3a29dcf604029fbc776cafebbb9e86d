@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "448f16e0_a4f4df44",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1016795
+      },
+      "writtenOn": "2022-08-18T13:10:13Z",
+      "side": 1,
+      "message": "This project cannot be built by Maven, there is no pom.xml, so it cannot be verified by the Jenkins server in the same way as all other projects. I will verify this manually because I don\u0027t think it affects the build.\n\nThe rendered contents of the file is the same as the rendered contents of the old Readme.htm. The links that now points to the github location works.",
+      "revId": "656a08d6d3a29dcf604029fbc776cafebbb9e86d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
